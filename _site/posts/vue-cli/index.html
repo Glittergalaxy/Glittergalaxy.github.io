@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-07-26-vue-cli</title><meta name="description" content="创建vue项目"><link rel="canonical" href="http://localhost:4000/posts/vue-cli/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/vue-cli/"><meta property="og:type" content="website"><meta property="og:title" content="vue-cli使用"><meta property="og:description" content="vue-cli的使用"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/vue-cli/"><meta name="twitter:title" content="vue-cli使用"><meta name="twitter:description" content="vue-cli的使用"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#vue">vue</a></div><p> vue-cli的使用</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">vue-cli使用</h1><p class="post-meta"> <time datetime="2017-07-26">26-07-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><h4 id="创建vue项目">创建vue项目</h4><ol><li>安装vue-cli<div class="highlighter-rouge"><pre class="highlight"><code>npm install -g vue-cli
+</code></pre></div><li>创建基于webpack模版的新项目<div class="highlighter-rouge"><pre class="highlight"><code>vue init webpack my-project
+</code></pre></div><li>安装项目依赖<div class="highlighter-rouge"><pre class="highlight"><code>--save 表示项目运行中使用到的，类似bootstrap/axios/js-cookie/element-ui/vuex/crypto-js
+--save-dev 表示打包时用到的，如css-loader/file-loader/style-loader等
+执行 npm install
+</code></pre></div><li>本地运行已搭建项目<div class="highlighter-rouge"><pre class="highlight"><code>npm run dev
+</code></pre></div><li>更新版本到线上<div class="highlighter-rouge"><pre class="highlight"><code>npm run build
+</code></pre></div></ol><h4 id="更新版本需注意配置">更新版本需注意配置</h4><ol><li>资源相关引用路径修改<div class="highlighter-rouge"><pre class="highlight"><code>config中 build下 assetsPublicPath:'./'改为相对路径
+</code></pre></div><li><p>bootstrap中的fonts引用<p>由于bootstrap中字体引用路径为(‘../’),而打包后的fonts和css在同一目录下，所以修改config中的utils.js,原理为修改资源引用的路径为相对路径<div class="highlighter-rouge"><pre class="highlight"><code>if(options.extract){
+ return ExtractTextPlugin.extract({
+     user:loaders,
+     fallback:'vue-style-loader',
+     publicPath:'../../' //by add
+ })
+}
+</code></pre></div><li><p>favicon.ico问题<p>favicon.ico在开发环境中放在根目录下，与index.html同级，但在打包到线上环境时，需进行设置，让其在index.html中自动生成favicon的引用<div class="highlighter-rouge"><pre class="highlight"><code>1.在webpack.dev.conf.js中修改
+ new HtmlWebpackPlugin({
+     filename:'index.html',
+     template:'index.html',
+     favicon:'favicon.ico', //by add
+     inject:true
+ })
+2.在webpack.prod.conf.js中修改
+ new HtmlWebpackPlugin({
+     favicon:'favicon.ico' //by add
+ })
+修改后打包生成的index.html中将包含favicon的引用
+</code></pre></div><li>静态文件的问题</ol><p>与src同级的目录static中存放着不进行修改和压缩的文件，使用中，可将环境配置文件serverurl放入其中。<p>本例中，在static/js目录中创建保存着三个不同环境的server路径的js文件，利用jenkins编译时选择相应环境，并通过jenkins修改对应环境的js文件名为serverurl来修改请求的server地址，从而达到根据不同环境来请求响应的服务器的目的(存在bug,待解决)。<div class="post-links"> <a class="link-to-post" href="/posts/vueproject/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">vue项目相关插件</span> </a> <a class="link-to-post" href="/posts/BMap-points/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">BMap添加闪烁点</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

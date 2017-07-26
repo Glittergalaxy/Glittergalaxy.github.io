@@ -1,0 +1,80 @@
+---
+layout: post
+title:  "vue-cli使用"
+crawlertitle: "2017-07-26-vue-cli"
+summary: "vue-cli的使用"
+date:   20170726
+categories: posts
+tags: 'vue'
+author: yunlei.ke
+---
+#### 创建vue项目
+
+1. 安装vue-cli
+``` 
+npm install -g vue-cli
+```
+
+2. 创建基于webpack模版的新项目
+```
+vue init webpack my-project
+```
+
+3. 安装项目依赖
+```
+--save 表示项目运行中使用到的，类似bootstrap/axios/js-cookie/element-ui/vuex/crypto-js
+--save-dev 表示打包时用到的，如css-loader/file-loader/style-loader等
+执行 npm install
+```
+
+4. 本地运行已搭建项目
+```
+npm run dev
+```
+
+5. 更新版本到线上
+```
+npm run build
+```
+
+#### 更新版本需注意配置
+1. 资源相关引用路径修改
+```
+config中 build下 assetsPublicPath:'./'改为相对路径
+```
+2. bootstrap中的fonts引用
+  
+    由于bootstrap中字体引用路径为('../'),而打包后的fonts和css在同一目录下，所以修改config中的utils.js,原理为修改资源引用的路径为相对路径
+```
+if(options.extract){
+    return ExtractTextPlugin.extract({
+        user:loaders,
+        fallback:'vue-style-loader',
+        publicPath:'../../' //by add
+    })
+}
+```
+
+3. favicon.ico问题
+
+    favicon.ico在开发环境中放在根目录下，与index.html同级，但在打包到线上环境时，需进行设置，让其在index.html中自动生成favicon的引用
+```
+1.在webpack.dev.conf.js中修改
+    new HtmlWebpackPlugin({
+        filename:'index.html',
+        template:'index.html',
+        favicon:'favicon.ico', //by add
+        inject:true
+    })
+2.在webpack.prod.conf.js中修改
+    new HtmlWebpackPlugin({
+        favicon:'favicon.ico' //by add
+    })
+修改后打包生成的index.html中将包含favicon的引用
+```
+
+4. 静态文件的问题
+  
+与src同级的目录static中存放着不进行修改和压缩的文件，使用中，可将环境配置文件serverurl放入其中。
+  
+本例中，在static/js目录中创建保存着三个不同环境的server路径的js文件，利用jenkins编译时选择相应环境，并通过jenkins修改对应环境的js文件名为serverurl来修改请求的server地址，从而达到根据不同环境来请求响应的服务器的目的(存在bug,待解决)。

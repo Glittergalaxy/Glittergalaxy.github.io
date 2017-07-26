@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-07-26-BMap</title><meta name="description" content="```&lt;!DOCTYPE HTML&gt; 加载闪烁点 "><link rel="canonical" href="http://localhost:4000/posts/BMap-points/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/BMap-points/"><meta property="og:type" content="website"><meta property="og:title" content="BMap添加闪烁点"><meta property="og:description" content="闪烁点"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/BMap-points/"><meta name="twitter:title" content="BMap添加闪烁点"><meta name="twitter:description" content="闪烁点"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#bmap">bmap</a></div><p> 闪烁点</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">BMap添加闪烁点</h1><p class="post-meta"> <time datetime="2017-07-26">26-07-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE HTML&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+	<span class="nt">&lt;title&gt;</span>加载闪烁点<span class="nt">&lt;/title&gt;</span>
+	<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=utf-8"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;style </span><span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;/style&gt;</span>
+	<span class="c">&lt;!-- &lt;script type="text/javascript" src="country.js"&gt;&lt;/script&gt; --&gt;</span>
+	<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://api.map.baidu.com/api?v=2.0&amp;ak=OxLYdFmu3YS1haMUcaBmGMBK0P7PbOqb"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"map"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+		<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Map</span><span class="p">(</span><span class="s2">"map"</span><span class="p">,</span> <span class="p">{});</span>                        <span class="c1">// 创建Map实例</span>
+		<span class="nx">map</span><span class="p">.</span><span class="nx">centerAndZoom</span><span class="p">(</span><span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="mf">116.404</span><span class="p">,</span> <span class="mf">39.915</span><span class="p">),</span> <span class="mi">4</span><span class="p">);</span>     <span class="c1">// 初始化地图,设置中心点坐标和地图级别</span>
+		<span class="nx">map</span><span class="p">.</span><span class="nx">enableScrollWheelZoom</span><span class="p">();</span>                            <span class="c1">//启用滚轮放大缩小</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">).</span><span class="nx">getContext</span><span class="p">)</span> <span class="p">{</span>
+			<span class="kd">var</span>  <span class="nx">mapStyle</span> <span class="o">=</span><span class="p">{</span> 
+					<span class="na">features</span><span class="p">:</span> <span class="p">[</span><span class="s2">"road"</span><span class="p">,</span> <span class="s2">"building"</span><span class="p">,</span><span class="s2">"water"</span><span class="p">,</span><span class="s2">"land"</span><span class="p">],</span><span class="c1">//隐藏地图上的poi</span>
+					<span class="na">style</span> <span class="p">:</span> <span class="s2">"dark"</span><span class="p">,</span> <span class="c1">//设置地图风格为高端黑</span>
+				<span class="p">}</span>
+			<span class="nx">map</span><span class="p">.</span><span class="nx">setMapStyle</span><span class="p">(</span><span class="nx">mapStyle</span><span class="p">);</span>
+
+			<span class="kd">var</span> <span class="nx">BW</span>            <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>    <span class="c1">//canvas width</span>
+				<span class="nx">BH</span>            <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>    <span class="c1">//canvas height</span>
+				<span class="nx">ctx</span>           <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
+				<span class="nx">stars</span>         <span class="o">=</span> <span class="p">[],</span>   <span class="c1">//存储所有星星对象的数组</span>
+				<span class="nx">timer</span>         <span class="o">=</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">//定时器</span>
+				<span class="nx">timeLine</span>      <span class="o">=</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">//时间轴对象</span>
+				<span class="nx">rs</span>            <span class="o">=</span> <span class="p">[],</span>   <span class="c1">//最新的结果</span>
+				<span class="nx">isNowTimeData</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">//是否显示当前时间的定位情况</span>
+				<span class="nx">py</span>            <span class="o">=</span> <span class="kc">null</span><span class="p">,</span> <span class="c1">//偏移</span>
+				<span class="nx">gridWidth</span>     <span class="o">=</span> <span class="mi">10000</span><span class="p">,</span><span class="c1">//网格的大小</span>
+				<span class="nx">isOverlay</span>     <span class="o">=</span> <span class="kc">false</span><span class="p">,</span><span class="c1">//是否叠加</span>
+				<span class="c1">//gridWidth   = 1,//网格的大小</span>
+				<span class="nx">country</span>       <span class="o">=</span> <span class="p">[{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Canada'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">1000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Germany'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Japan'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Australia'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'South Korea'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'North Korea'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Thailand'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'China'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Brazil'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Russia'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Mexico'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'Poland'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">10000</span><span class="p">}],</span> <span class="c1">//国家</span>
+				<span class="nx">city</span>          <span class="o">=</span> <span class="p">[{</span><span class="na">name</span><span class="p">:</span><span class="s1">'杭州'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'上海'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">4000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'重庆'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'南昌'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'武汉'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'郑州'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'北京'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'广州'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'深圳'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'成都'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'合肥'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'西安'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'南京'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'天津'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'青海'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'青岛'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'济南'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'三亚'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">},{</span><span class="na">name</span><span class="p">:</span><span class="s1">'珠海'</span><span class="p">,</span><span class="na">num</span><span class="p">:</span><span class="mi">2000</span><span class="p">}];</span><span class="c1">//城市</span>
+				<span class="nx">cityArray</span>     <span class="o">=</span> <span class="p">[],</span>
+				<span class="nx">countrys</span>      <span class="o">=</span> <span class="p">[],</span>
+				<span class="nx">canvas</span>        <span class="o">=</span> <span class="kc">null</span><span class="p">;</span> <span class="c1">//偏移</span>
+
+			<span class="kd">function</span> <span class="nx">Star</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span>
+			<span class="p">}</span>
+
+			<span class="nx">Star</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">x</span>   <span class="o">=</span> <span class="o">~~</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">y</span>   <span class="o">=</span> <span class="o">~~</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">name</span><span class="p">;</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">initSize</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span>
+				<span class="c1">// this.size = this.maxSize;</span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">~~</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="k">this</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">maxSize</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="nx">Star</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">initSize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">size</span><span class="p">)</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">size</span> <span class="o">=</span> <span class="o">~~</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">maxSize</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">size</span><span class="p">);</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">maxSize</span> <span class="o">=</span> <span class="nx">size</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="p">?</span> <span class="mi">5</span> <span class="p">:</span> <span class="nx">size</span><span class="p">;</span>
+			<span class="p">}</span>
+
+			<span class="nx">Star</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">render</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+				<span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+				<span class="k">if</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span> <span class="o">&lt;</span><span class="mi">0</span> <span class="o">||</span> <span class="nx">p</span><span class="p">.</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="nx">BW</span> <span class="o">||</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span> <span class="o">&gt;</span> <span class="nx">BH</span><span class="p">)</span> <span class="p">{</span>
+					<span class="k">return</span><span class="p">;</span>
+				<span class="p">}</span>
+
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+				<span class="kd">var</span> <span class="nx">gradient</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">createRadialGradient</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">size</span><span class="p">);</span>
+				<span class="nx">gradient</span><span class="p">.</span><span class="nx">addColorStop</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"rgba(7,127,245,1)"</span><span class="p">);</span>
+				<span class="nx">gradient</span><span class="p">.</span><span class="nx">addColorStop</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"rgba(7,127,245,0.5)"</span><span class="p">);</span>
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">gradient</span><span class="p">;</span>
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span><span class="o">=</span><span class="s2">"20px Georgia"</span><span class="p">;</span>
+				<span class="k">if</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">){</span>
+					<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span><span class="nx">p</span><span class="p">.</span><span class="nx">x</span><span class="o">+</span><span class="nx">p</span><span class="p">.</span><span class="nx">size</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span><span class="nx">p</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span><span class="mi">800</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">size</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+				<span class="c1">//随机产生星星消失的情况</span>
+				<span class="k">if</span> <span class="p">(</span><span class="o">~~</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+					<span class="nx">p</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+					<span class="nx">p</span><span class="p">.</span><span class="nx">size</span> <span class="o">=</span> <span class="nx">p</span><span class="p">.</span><span class="nx">maxSize</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+            
+            <span class="c1">//设置定时器，每隔180ms重新画一遍星星</span>
+			<span class="kd">function</span> <span class="nx">render</span><span class="p">(){</span>
+				<span class="nx">renderAction</span><span class="p">();</span>
+				<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">render</span><span class="p">,</span> <span class="mi">180</span><span class="p">);</span>
+			<span class="p">}</span>
+
+			<span class="kd">function</span> <span class="nx">renderAction</span><span class="p">()</span> <span class="p">{</span>
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">BW</span><span class="p">,</span> <span class="nx">BH</span><span class="p">);</span>
+				<span class="nx">ctx</span><span class="p">.</span><span class="nx">globalCompositeOperation</span> <span class="o">=</span> <span class="s2">"lighter"</span><span class="p">;</span>
+				<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">stars</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
+					<span class="k">if</span> <span class="p">(</span><span class="nx">stars</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span> <span class="p">{</span>
+						<span class="nx">stars</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">render</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+
+			<span class="c1">// 产生画布容器</span>
+			<span class="kd">function</span> <span class="nx">ComplexCustomOverlay</span><span class="p">(</span><span class="nx">point</span><span class="p">){</span>
+			  <span class="k">this</span><span class="p">.</span><span class="nx">_point</span> <span class="o">=</span> <span class="nx">point</span><span class="p">;</span>
+			<span class="p">}</span>
+
+			<span class="nx">ComplexCustomOverlay</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Overlay</span><span class="p">();</span>
+			<span class="nx">ComplexCustomOverlay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">initialize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">map</span><span class="p">){</span>
+				<span class="k">this</span><span class="p">.</span><span class="nx">_map</span> <span class="o">=</span> <span class="nx">map</span><span class="p">;</span>
+				<span class="nx">canvas</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">);</span>
+				<span class="nx">canvas</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">cssText</span> <span class="o">=</span> <span class="s2">"position:absolute;left:0;top:0;"</span><span class="p">;</span>
+				<span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">);</span>
+				<span class="kd">var</span> <span class="nx">size</span> <span class="o">=</span> <span class="nx">map</span><span class="p">.</span><span class="nx">getSize</span><span class="p">();</span>
+				<span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">BW</span> <span class="o">=</span> <span class="nx">size</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+				<span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">BH</span> <span class="o">=</span> <span class="nx">size</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+				<span class="nx">map</span><span class="p">.</span><span class="nx">getPanes</span><span class="p">().</span><span class="nx">labelPane</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">canvas</span><span class="p">);</span>
+				<span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">canvas</span><span class="p">;</span>
+			<span class="p">}</span>
+			<span class="c1">//缩放时触发</span>
+			<span class="nx">ComplexCustomOverlay</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">draw</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+				<span class="kd">var</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_map</span><span class="p">;</span>
+				<span class="kd">var</span> <span class="nx">bounds</span> <span class="o">=</span> <span class="nx">map</span><span class="p">.</span><span class="nx">getBounds</span><span class="p">();</span>
+				<span class="kd">var</span> <span class="nx">sw</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">getSouthWest</span><span class="p">();</span>
+				<span class="kd">var</span> <span class="nx">ne</span> <span class="o">=</span> <span class="nx">bounds</span><span class="p">.</span><span class="nx">getNorthEast</span><span class="p">();</span>
+				<span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">map</span><span class="p">.</span><span class="nx">pointToOverlayPixel</span><span class="p">(</span><span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">sw</span><span class="p">.</span><span class="nx">lng</span><span class="p">,</span> <span class="nx">ne</span><span class="p">.</span><span class="nx">lat</span><span class="p">));</span>
+				<span class="nx">py</span> <span class="o">=</span> <span class="nx">pixel</span><span class="p">;</span>
+				<span class="k">if</span> <span class="p">(</span><span class="nx">cityArray</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">countrys</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+					<span class="nx">showStars</span><span class="p">();</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="kd">var</span> <span class="nx">myCompOverlay</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ComplexCustomOverlay</span><span class="p">(</span><span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="mf">116.407845</span><span class="p">,</span><span class="mf">39.914101</span><span class="p">));</span>
+			<span class="nx">map</span><span class="p">.</span><span class="nx">addOverlay</span><span class="p">(</span><span class="nx">myCompOverlay</span><span class="p">);</span>
+
+			<span class="c1">// var project = map.getMapType().getProjection();//实例化后可进行墨卡托坐标与百度坐标转换</span>
+			<span class="c1">// var bounds = map.getBounds();</span>
+			<span class="c1">// var sw = bounds.getSouthWest();</span>
+			<span class="c1">// var ne = bounds.getNorthEast();</span>
+			<span class="c1">// sw = project.lngLatToPoint(new BMap.Point(sw.lng, sw.lat));</span>
+			<span class="c1">// ne = project.lngLatToPoint(new BMap.Point(ne.lng, ne.lat));</span>
+
+			<span class="c1">// //左上角墨卡托坐标点</span>
+			<span class="c1">// var original = {</span>
+			<span class="c1">// 	x : sw.x,</span>
+			<span class="c1">// 	y : ne.y</span>
+			<span class="c1">// }</span>
+
+			
+			<span class="c1">//遍历国家，获取经纬度</span>
+			<span class="kd">function</span> <span class="nx">getCountry</span><span class="p">(){</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">country</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+					<span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">country</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+					<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">countryArray</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+						<span class="k">if</span><span class="p">(</span><span class="nx">temp</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="nx">countryArray</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">name</span><span class="p">){</span>
+							<span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="p">{</span>
+								<span class="na">lng</span> <span class="p">:</span> <span class="nx">countryArray</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">longitude</span><span class="p">,</span>
+								<span class="na">lat</span> <span class="p">:</span> <span class="nx">countryArray</span><span class="p">[</span><span class="nx">j</span><span class="p">].</span><span class="nx">latitude</span><span class="p">,</span>
+								<span class="na">size</span> <span class="p">:</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">num</span><span class="p">,</span>
+								<span class="na">name</span> <span class="p">:</span> <span class="nx">temp</span><span class="p">.</span><span class="nx">name</span>
+							<span class="p">}</span>
+							<span class="nx">countrys</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+				<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">showStars</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="nx">getCountry</span><span class="p">();</span>
+			<span class="nx">bdGEO</span><span class="p">();</span>
+			
+			<span class="c1">//将城市转换成经纬度</span>
+			<span class="kd">function</span> <span class="nx">bdGEO</span><span class="p">(){</span>
+				<span class="kd">var</span> <span class="nx">myGeo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Geocoder</span><span class="p">();</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">city</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+					<span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="nx">city</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+					<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arg</span><span class="p">){</span>
+						<span class="nx">myGeo</span><span class="p">.</span><span class="nx">getPoint</span><span class="p">(</span><span class="nx">arg</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">point</span><span class="p">){</span>
+							<span class="k">if</span> <span class="p">(</span><span class="nx">point</span><span class="p">)</span> <span class="p">{</span>
+								<span class="kd">var</span> <span class="nx">address</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">point</span><span class="p">.</span><span class="nx">lng</span><span class="p">,</span> <span class="nx">point</span><span class="p">.</span><span class="nx">lat</span><span class="p">);</span>
+								<span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+									<span class="na">lng</span> <span class="p">:</span> <span class="nx">address</span><span class="p">.</span><span class="nx">lng</span><span class="p">,</span>
+									<span class="na">lat</span> <span class="p">:</span> <span class="nx">address</span><span class="p">.</span><span class="nx">lat</span><span class="p">,</span>
+									<span class="na">size</span> <span class="p">:</span> <span class="nx">arg</span><span class="p">.</span><span class="nx">num</span>
+									<span class="c1">// name : arg.name</span>
+								<span class="p">};</span>
+								<span class="nx">cityArray</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+							<span class="p">}</span>
+						<span class="p">});</span>
+					<span class="p">})(</span><span class="nx">temp</span><span class="p">);</span>
+				<span class="p">}</span>	
+			<span class="p">}</span>
+			
+			
+
+			<span class="cm">/**
+			 * 请求定位数据,并在地图上绘制出
+			 * @param 请求的时间
+			 * @param 成功后执行的回调函数
+			 * 
+			 */</span>
+			<span class="c1">// var requestMgr = {</span>
+			<span class="c1">// 	request: function (time, successCbk) {</span>
+			<span class="c1">// 		if (document.location.host === 'developer.baidu.com') {</span>
+			<span class="c1">// 			var url = "http://developer.baidu.com/map/jsdemo/data/data";</span>
+			<span class="c1">// 		} else {</span>
+			<span class="c1">// 			var url = "../data/data";</span>
+			<span class="c1">// 		}</span>
+					
+			<span class="c1">// 		var xhr = new XMLHttpRequest();</span>
+			<span class="c1">// 		xhr.onreadystatechange = function() {</span>
+			<span class="c1">// 			if( xhr.readyState == 4  &amp;&amp; xhr.status == 200 ) {</span>
+			<span class="c1">// 				if (!isOverlay) {</span>
+			<span class="c1">// 					rs = JSON.parse(xhr.responseText);</span>
+			<span class="c1">// 				} else {</span>
+			<span class="c1">// 					rs = rs.concat(JSON.parse(xhr.responseText));</span>
+			<span class="c1">// 					if (rs.length &gt; 10000) {</span>
+			<span class="c1">// 						rs.splice(0, rs.length - 10000);</span>
+			<span class="c1">// 					}</span>
+			<span class="c1">// 				}</span>
+			<span class="c1">// 				showStars(rs);</span>
+			<span class="c1">// 				if (successCbk) {</span>
+			<span class="c1">// 					successCbk();</span>
+			<span class="c1">// 				}</span>
+			<span class="c1">// 			}</span>
+			<span class="c1">// 		}</span>
+			<span class="c1">// 		xhr.open( "GET", url, true );</span>
+			<span class="c1">// 		xhr.send( null );</span>
+			<span class="c1">// 	}</span>
+			<span class="c1">// }</span>
+
+			<span class="c1">//显示星星</span>
+			<span class="kd">function</span> <span class="nx">showStars</span><span class="p">()</span> <span class="p">{</span>
+				<span class="nx">stars</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+				<span class="kd">var</span> <span class="nx">temp</span> <span class="o">=</span> <span class="p">{};</span>
+				<span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nx">countrys</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">cityArray</span><span class="p">);</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+					<span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">arr</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+					<span class="kd">var</span> <span class="nx">point</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">BMap</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="nx">item</span><span class="p">.</span><span class="nx">lng</span><span class="p">,</span> <span class="nx">item</span><span class="p">.</span><span class="nx">lat</span><span class="p">);</span>
+					<span class="kd">var</span> <span class="nx">px</span> <span class="o">=</span> <span class="nx">map</span><span class="p">.</span><span class="nx">pointToOverlayPixel</span><span class="p">(</span><span class="nx">point</span><span class="p">);</span>
+						<span class="c1">//create all stars</span>
+						<span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Star</span><span class="p">({</span>
+							<span class="na">x</span><span class="p">:</span> <span class="nx">px</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">py</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> 
+							<span class="na">y</span><span class="p">:</span> <span class="nx">px</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">py</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span>
+							<span class="na">size</span><span class="p">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">size</span><span class="p">,</span>
+							<span class="na">name</span> <span class="p">:</span> <span class="nx">item</span><span class="p">.</span><span class="nx">name</span>
+						<span class="p">});</span>
+						<span class="nx">stars</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+					<span class="c1">//}</span>
+				<span class="p">}</span>
+				<span class="nx">canvas</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">py</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="s2">"px"</span><span class="p">;</span>
+				<span class="nx">canvas</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">py</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="s2">"px"</span><span class="p">;</span>
+				<span class="nx">renderAction</span><span class="p">();</span>
+			<span class="p">}</span>
+
+			<span class="nx">render</span><span class="p">();</span>
+
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="nx">alert</span><span class="p">(</span><span class="s1">'请在chrome、safari、IE8+以上浏览器查看本示例'</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/vue-cli/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">vue-cli使用</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

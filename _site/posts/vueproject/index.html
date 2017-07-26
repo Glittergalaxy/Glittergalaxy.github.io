@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-07-26-vueproject</title><meta name="description" content="所有插件在项目中使用大前提为 npm install –save 在项目运行时所需用到的插件1. axios 用于发送http请求"><link rel="canonical" href="http://localhost:4000/posts/vueproject/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/vueproject/"><meta property="og:type" content="website"><meta property="og:title" content="vue项目相关插件"><meta property="og:description" content="vue项目相关插件"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/vueproject/"><meta name="twitter:title" content="vue项目相关插件"><meta name="twitter:description" content="vue项目相关插件"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#vue">vue</a></div><p> vue项目相关插件</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">vue项目相关插件</h1><p class="post-meta"> <time datetime="2017-07-26">26-07-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p><strong>所有插件在项目中使用大前提为</strong> npm install –save 在项目运行时所需用到的插件<h5 id="1-axios-用于发送http请求">1. axios 用于发送http请求</h5><ul><li>引入方式<div class="highlighter-rouge"><pre class="highlight"><code>import axios from 'axios'
+</code></pre></div><li>所需设置<div class="highlighter-rouge"><pre class="highlight"><code>//设置传输数据类型
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+//设置服务器url
+axios.defaults.baseURL = serviceUrl;
+//设置headers
+axios.defaults.headers.common = {
+  UserId:Cookies.get('UserId')
+}
+//配置请求方法，以下为发送文件上传请求示例
+export default {
+  file: function(url,data){
+      return new Promise((resolve,reject) =&gt; {
+          let form = new FormData() //实例化一个formdata类型
+          form.append(file,data.file) //将所传文件放入formdata类型数据中
+          axios.post(url,form,{
+              method:'post',
+              headers:{'Content-Type':'multiple/form-data'} //设置传输文件格式为form-data类型
+          })
+          .then((response) =&gt; {
+              resolve(response.data)
+          })
+          .catch((error) =&gt; {
+              reject(error)
+          })
+      })
+  }
+}
+</code></pre></div></ul><h5 id="2-关于es6中promise对象的使用">2. 关于ES6中promise对象的使用</h5><p><a href="http://es6.ruanyifeng.com/?search=promise&amp;x=0&amp;y=0#docs/promise">阮一峰的说明</a><p>同jquery中定义的promise对象类似，prototype中有.then()方法和.catch方法<div class="highlighter-rouge"><pre class="highlight"><code>- .then()方法可以有两个参数，分别为resolve和reject时的回调方法。
+- .catch()方法即为.then(null,reject)的别名，用于指定发生错误时的回调函数，同时.then()方法中制定的回调函数，若异步过程产生错误，也会被catch方法捕获
+- 一般来说，不要在then方法里面定义reject状告台的回调函数，总是使用catch方法,因为可以捕获到前面then方法执行的错误。
+</code></pre></div><h5 id="3-js-cookie插件">3. js-cookie插件</h5><p>cookie使用有两处 1&gt; http请求头部获取cookie 2&gt;登陆后设置cookie<ul><li>引入方式<div class="highlighter-rouge"><pre class="highlight"><code>import * as Cookies from 'js-cookie';
+</code></pre></div><li>使用方法<div class="highlighter-rouge"><pre class="highlight"><code>设置cookie Cookies.set('userid','1234',{expires:1(单位天)})
+获取cookie Cookies.get('userid')
+</code></pre></div></ul><h5 id="4-crypto-js插件">4. crypto-js插件</h5><ul><li>引入方式<div class="highlighter-rouge"><pre class="highlight"><code>import SHA1 from 'crypto-js/sha1'
+或
+import CryptoJS from 'crypto-js'
+</code></pre></div><li>使用方法<div class="highlighter-rouge"><pre class="highlight"><code>SHA1(psw).toString()
+或
+CryptoJS.SHA1(psw).toString()
+</code></pre></div></ul><h5 id="5-bootstrap样式">5. bootstrap样式</h5><ul><li>引入方式<div class="highlighter-rouge"><pre class="highlight"><code>在main.js中
+import './assets/css/bootstrap.min.css'
+</code></pre></div></ul><h5 id="6-element-ui插件及样式">6. element-ui插件及样式</h5><ul><li>引入方式</ul><div class="highlighter-rouge"><pre class="highlight"><code>在main.js中
+import ElementUI from 'elemnt-ui'
+import 'element-ui/lib/theme-default/index.css'
+
+Vue.use(ElementUI)
+</code></pre></div><ul><li>使用方式</ul><div class="highlighter-rouge"><pre class="highlight"><code>在component中使用elemnt-ui中的元素，如
+&lt;el-form&gt;&lt;/el-form&gt; form表单中带相关校验
+&lt;el-table&gt;&lt;/el-table&gt; table带远程排序、选择某行、添加序号、隐藏内容等功能
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/vue-cli/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">vue-cli使用</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

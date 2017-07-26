@@ -1,8 +1,8 @@
 ---
-bg: "owl.jpg"
+bg: "galaxy.jpg"
 layout: page
 title: "About"
-crawlertitle: "Why and how this blog was created"
+crawlertitle: "about"
 permalink: /about/
 summary: "About this blog"
 active: about
