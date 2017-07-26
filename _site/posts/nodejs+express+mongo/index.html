@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-05-05-nodejs+express</title><meta name="description" content="利用nodejs + express框架 + mongo数据库搭建后台环境进行前后台交互"><link rel="canonical" href="http://localhost:4000/posts/nodejs+express+mongo/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/nodejs+express+mongo/"><meta property="og:type" content="website"><meta property="og:title" content="nodejs+express+mongo构建项目"><meta property="og:description" content="项目全栈"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/nodejs+express+mongo/"><meta name="twitter:title" content="nodejs+express+mongo构建项目"><meta name="twitter:description" content="项目全栈"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#nodejs">nodejs</a></div><p> 项目全栈</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">nodejs+express+mongo构建项目</h1><p class="post-meta"> <time datetime="2017-05-05">05-05-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>利用nodejs + express框架 + mongo数据库搭建后台环境进行前后台交互<p><a href="https://my.oschina.net/chenhao901007/blog/312367">参考文档1</a> <a href="http://cnodejs.org/topic/547293caa3e2aee40698df0b">参考文档2</a><h3 id="1安装文件">1.安装文件</h3><h4 id="1-安装并运行mongo">1） 安装并运行mongo</h4><ul><li>官网下载msi安装包，点击下一步直至安装完成。<li>安装服务：<div class="highlighter-rouge"><pre class="highlight"><code>安装完成后，一管理员身份运行cmd，cd到mongodb安装目录下的bin目录，然后输入：
+mongod --dbpath="mongodb安装目录\data" --logpath="mongodb安装目录\log\log.txt" --install --serviceName MongoDB --serviceDisplayName MongoDB
+此步骤中创建数据库目录同时创建日志文件，并将mongo安装为服务
+</code></pre></div><li>另开一个cmd,切换到bin目录，然后输入mongo 启动数据库。<li>启动后，可输入命令行创建数据库等。 ```<li>show dbs<li>use dbname<li>db.”tablename”<li>db.”tablename”.insert({insertObj}) //插入数据<li>db.”tablename”.find() //查询数据 ```<h4 id="2-安装-express--express-generator">2） 安装 express + express-generator</h4><li>安装全局 express+express-generator即可<li>创建项目<div class="highlighter-rouge"><pre class="highlight"><code>express packagename -e -e 表示支持ejs模板引擎 默认是jaden
+npm install 安装依赖项
+npm start 启动项目
+http://127.0.0.1:3000/在浏览器中查看
+</code></pre></div></ul><h3 id="2创建项目">2.创建项目</h3><h5 id="1appjs中可修改模板引擎类型">1）app.js中可修改模板引擎类型</h5><div class="highlighter-rouge"><pre class="highlight"><code>app.set('view engine','ejs') 改为
+app.set('view engine','html')
+再进行注册
+app.engine('.html',require('ejs').__express)
+</code></pre></div><h5 id="2创建loginhtmlindexhtmlcenterhtml">2）创建login.html,index.html,center.html</h5><ul><li>index页面创建链接，可跳转到login页面<li>login页面创建form表单，可提交到center页面<li>center页面可进行登出，回到index页面</ul><h5 id="3连接数据库文件">3）连接数据库文件</h5><div class="highlighter-rouge"><pre class="highlight"><code>var mongoose = require('mongoose');
+var db = mongoose.createConnection('mongodb:localhost/hello');//localhost后跟之前创建的数据库名，此处不可使用connect,
+var Shema = mongoose.Schema;
+var userSchema = new Schema({
+    name:String,
+    age:String
+})//创建新的模型
+exports.user = db.model('user',userSchema);//与user表关联
+
+</code></pre></div><h5 id="4路由配置">4）路由配置</h5><div class="highlighter-rouge"><pre class="highlight"><code>var express = require('express');
+var router = express.Router();
+var user = require('../models/user').user;
+
+router.get('/',function(req,res){
+    res.render('index',{title:'index'});//制定跳转后页面且指定其title
+})
+
+router.get('/login',function(req,res){
+    res.render('login',{title:'login'});//制定跳转后页面且指定其title
+})
+
+router.get('/logout',function(req,res){
+    res.render('logout',{title:'logout'});//制定跳转后页面且指定其title
+})
+
+//login的form表单提交为post方式
+router.post('/homepage',function(req,res){
+    var queryinfo = {name:req.body.name,age:req.body.age};
+    (function(){
+        //查询数据库中符合查询信息的数量
+        user.count(queryinfo,function(err,doc){
+            if(doc == 1){
+                console.log(queryinfo.name + ":login success in " + new Date())
+                res.render('homepage',{title:"homepage"});
+                //若为1则成功跳转到主页并提示信息
+            }else{
+                console.log(queryinfo.name + ":failed success in " + new Date())
+                res.redirect('/')
+                //否则返回首页
+            }
+        })
+    })(queryinfo);
+})
+
+modules.exports = router;
+
+</code></pre></div><h3 id="3调试工具">3.调试工具</h3><p>node-inspector<div class="highlighter-rouge"><pre class="highlight"><code>全局安装
+npm i -g node-inspector
+安装完成后进入项目目录
+node --debug ./bin/www
+即可在命令行查看错误信息
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/vue-cli/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">vue-cli使用</span> </a> <a class="link-to-post" href="/posts/echarts-highcharts/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">echarts-highcharts</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

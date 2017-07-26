@@ -1,14 +1,17 @@
 ---
 layout: post
 title:  "vue项目相关插件"
-crawlertitle: "2017-07-26-vueproject"
+crawlertitle: "2017-06-14-vueproject"
 summary: "vue项目相关插件"
-date:   20170726
+date:   20170614
 categories: posts
 tags: 'vue'
 author: yunlei.ke
 ---
+vue项目搭建过程中所需插件
+
 **所有插件在项目中使用大前提为** npm install --save 在项目运行时所需用到的插件
+
 ##### 1. axios 用于发送http请求
 
 - 引入方式

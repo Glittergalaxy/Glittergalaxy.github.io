@@ -1,13 +1,15 @@
 ---
 layout: post
 title:  "BMap添加闪烁点"
-crawlertitle: "2017-07-26-BMap"
+crawlertitle: "2017-02-27-BMap"
 summary: "闪烁点"
-date:   20170726
+date:   20170227
 categories: posts
 tags: 'BMap'
 author: yunlei.ke
 ---
+利用百度地图API添加闪烁点
+
 ```
 <!DOCTYPE HTML>
 <html>

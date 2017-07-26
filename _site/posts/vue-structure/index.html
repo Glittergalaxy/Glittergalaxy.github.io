@@ -1,0 +1,133 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-06-16-vue-structure</title><meta name="description" content="解构vue2.0项目内部文档结构"><link rel="canonical" href="http://localhost:4000/posts/vue-structure/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/vue-structure/"><meta property="og:type" content="website"><meta property="og:title" content="vue项目文档结构"><meta property="og:description" content="内部解构"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/vue-structure/"><meta name="twitter:title" content="vue项目文档结构"><meta name="twitter:description" content="内部解构"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#vue">vue</a></div><p> 内部解构</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">vue项目文档结构</h1><p class="post-meta"> <time datetime="2017-06-16">16-06-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>解构vue2.0项目内部文档结构<div class="highlighter-rouge"><pre class="highlight"><code>- packageName
+    - build (auto，dev和prod中配置favicon.ico,utils中配置bootstap带的fonts的publicPath)
+        - utils.js 
+        - webpack.base.conf.js
+        - webpack.dev.conf.js
+        - webpack.prod.conf.js
+    - config (auto,通常需配置路径等参数)
+    - dist (npm run build 后生成)
+        - static
+        - index.html
+        - favicon.ico
+    - node_modules (依赖项)
+    - src (项目源文件)
+        - assets (css/fonts/img)
+        - components (common Components)
+            - topMenu
+            - leftMenu
+            - pager
+            - message
+        - service(http请求以及常量映射)
+            - http
+            - api
+            - commonList
+        - modules (路由模块)
+            - product
+            - order
+            - user
+        - router
+        - store
+        - App.vue
+        - main.js
+    - static (静态文件)
+        - js (如url配置文件，如serverurl/develop/product/prerelease)
+    - favicon.ico
+    - index.html
+    - package.json
+</code></pre></div><h4 id="1-indexhtml-书写规则">1. index.html 书写规则</h4><div class="highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>life<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"app"</span><span class="nt">&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+包含html完整的文档结构
+</code></pre></div><h4 id="2-appvue-书写规则">2. App.vue 书写规则</h4><div class="highlighter-rouge"><pre class="highlight"><code>与一般的vue组件相同，包含html/js/css
+ html部分
+&lt;template&gt;
+    &lt;div id="app"&gt;
+        &lt;alert-bar&gt;&lt;/alert-bar&gt;
+        &lt;top-menu v-if="index"&gt;&lt;/top-menu&gt;
+        &lt;router-view&gt;&lt;/router-view&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+通常根元素为index.html中定义的id为app的元素，且包含router-view元素（路由视图）
+</code></pre></div><h4 id="3-mainjs书写规则">3. main.js书写规则</h4><div class="highlighter-rouge"><pre class="highlight"><code>1.引入项目必备
+import Vue from 'vue'
+import App from './App.vue'
+import store from './store'
+import router from './router'
+
+2.引入公用插件以及css
+import './assets/css/bootstrap.min.css'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
+
+Vue.use(ElementUI)
+
+3.创建vue实例
+new Vue({
+    el:'#app',
+    store,
+    router,
+    render: h =&gt; h(App)
+}).$mount('#app')
+
+</code></pre></div><h4 id="4-routerjs书写规则">4. router.js书写规则</h4><div class="highlighter-rouge"><pre class="highlight"><code>1.引入必备插件
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+2.引入路由组件
+import Work from '../modules/work/work.vue'
+import WorkAuditing from '../modules/work/auditing.vue'
+import WorkAudited from '../modules/work/audited.vue'
+import License from '../modules/work/license.vue'
+import Authorize from '../modules/work/authorize.vue'
+
+3.使用方法
+Vue.use(VueRouter)
+const routes = [
+    {path:'/',redirect:'/login'},
+    {path:'/order',component:'Order',redirect:'/order/list',children:[
+        {path:'order/list',name:'orderList',component:orderList}
+    ]}
+]
+export default new VueRouter({routes})
+
+最后在main.js中注入
+</code></pre></div><h4 id="5-store书写规则-vuex官方文档">5. store书写规则 <a href="https://vuex.vuejs.org/zh-cn/mutations.html">vuex官方文档</a></h4><div class="highlighter-rouge"><pre class="highlight"><code>1.引入插件
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+2.使用方法
+Vue.use(Vuex)
+export default new Vuex.Store({
+    modules:{
+        
+    }
+})
+3. modules中书写
+- state
+    const state = {
+       current:0, 
+    }
+- getters
+    const getters = {
+        current:state =&gt; state.current
+    }
+- actions
+    const actions = {
+        setCurrent({commit},page){
+            commit(SET_CURRENT,page)
+        }
+    }
+- mutations
+    const mutations = {
+        [SET_CURRENT](state,page){
+            state.current = page;
+        }
+    }
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/vueproject/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">vue项目相关插件</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

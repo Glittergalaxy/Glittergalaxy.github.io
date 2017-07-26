@@ -1,13 +1,15 @@
 ---
 layout: post
 title:  "vue-cli使用"
-crawlertitle: "2017-07-26-vue-cli"
+crawlertitle: "2017-06-14-vue-cli"
 summary: "vue-cli的使用"
-date:   20170726
+date:   20170614
 categories: posts
 tags: 'vue'
 author: yunlei.ke
 ---
+关于vue脚手架vue-cli的使用
+
 #### 创建vue项目
 
 1. 安装vue-cli

@@ -1,0 +1,162 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-02-14-iplocate</title><meta name="description" content="利用前端发送ip数组，node+express接收到后组装url发送请求到百度地图api并返回请求结果数组给前端"><link rel="canonical" href="http://localhost:4000/posts/nodejs+express+BMap/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/nodejs+express+BMap/"><meta property="og:type" content="website"><meta property="og:title" content="IP地址定位"><meta property="og:description" content="node+express+BMap"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/nodejs+express+BMap/"><meta name="twitter:title" content="IP地址定位"><meta name="twitter:description" content="node+express+BMap"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#bmap">bmap</a></div><p> node+express+BMap</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">IP地址定位</h1><p class="post-meta"> <time datetime="2017-02-14">14-02-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>利用前端发送ip数组，node+express接收到后组装url发送请求到百度地图api并返回请求结果数组给前端<h4 id="前端代码部分jquery">前端代码部分（jquery）</h4><p>步骤：<ul><li>引用百度地图<li>实例化百度地图，添加相关缩放控件，设置主图<li>重写http请求，设置contentType并对请求数据作转化为json对象处理<li>发送请求数据，将请求结果转化成可处理对象<li>根据响应结果的经纬度进行定位，添加默认覆盖物和iplabel</ul><div class="highlighter-rouge"><pre class="highlight"><code>&lt;script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&amp;ak=OxLYdFmu3YS1haMUcaBmGMBK0P7PbOqb"&gt;&lt;/script&gt;
+&lt;body&gt;
+	&lt;div&gt;
+		&lt;input type="text" id="ipAddress"/&gt;
+	&lt;/div&gt;
+	&lt;div id="allmap"&gt;&lt;/div&gt;
+&lt;/body&gt;                                                                                                   
+&lt;/html&gt;
+&lt;script type="text/javascript"&gt;
+var map = new BMap.Map("allmap");
+// var point = new BMap.Point(116.331398,39.897445);
+// map.centerAndZoom(point,12);
+map.addControl(new BMap.NavigationControl());               // 添加平移缩放控件
+map.addControl(new BMap.ScaleControl());                    // 添加比例尺控件
+map.addControl(new BMap.OverviewMapControl());              //添加缩略地图控件
+map.enableScrollWheelZoom();                            //启用滚轮放大缩小
+map.addControl(new BMap.MapTypeControl());          //添加地图类型控件
+map.setMapStyle({style:'midnight'});
+function http(url,method,dataObj){
+	var formdata = JSON.stringify(dataObj);
+	//异步操作
+	var defer = $.Deferred();   
+	//发送
+	$.ajax({
+		url : url,
+		type : method,
+		data : formdata,
+		contentType:'application/json; charset=utf-8',
+		success : function(data){
+				defer.resolve(data);//执行状态从"未完成"改为"已完成"
+		},
+		error : function(data){
+		  	defer.reject(data);
+		}
+	});
+	return defer.promise();
+}
+//根据ip数组获取位置数组
+var arr = ['112.18.17.7','112.118.17.7'];
+var locationArr = [];
+
+getLocate();
+
+function getLocate(){	
+	http('http://127.0.0.1:8081/map','post',arr).then(function(data){
+		for (var i = 0; i &lt; data.length; i++) {
+			var temp = JSON.parse(data[i]);
+			var obj = {
+				'ip': arr[i],
+				'x': temp.content.point.x,
+				'y': temp.content.point.y,
+			}
+			locationArr.push(obj);
+		}	
+		//添加标注
+		addMarker();
+	});
+	
+}
+//根据ip获取位置
+// function getLocate(){	
+// 	http('http://127.0.0.1:8081/map','post',{'ip':'112.13.41.2'}).then(function(data){
+// 		console.log(data);
+// 		var obj = {
+// 			'ip': '115.3.4.2',
+// 			'x': data.content.point.x,
+// 			'y': data.content.point.y,
+// 		};	
+// 		//添加标注
+// 		addMarker(obj);
+// 	});
+// }
+// 创建多个标注
+function addMarker(){
+	for (var i = 0; i &lt; locationArr.length; i ++) {
+		var temp = locationArr[i];
+		var point = new BMap.Point(temp.x, temp.y);
+		map.centerAndZoom(point,8);
+		var marker = new BMap.Marker(point);
+  		map.addOverlay(marker);
+  		var label = new BMap.Label(temp.ip,{offset:new BMap.Size(20,-10)});
+		marker.setLabel(label);
+	}
+  
+}	
+//创建一个标注
+// function addMarker(temp){
+// 		console.log(temp.x);
+// 		var point = new BMap.Point(temp.x, temp.y);
+// 		map.centerAndZoom(point,12);
+// 		var marker = new BMap.Marker(point);
+//   		map.addOverlay(marker);
+//   		var label = new BMap.Label(temp.ip,{offset:new BMap.Size(20,-10)});
+// 		marker.setLabel(label);
+  
+// }	
+&lt;/script&gt;
+</code></pre></div><h4 id="后端代码nodejs">后端代码（nodejs）</h4><p>步骤：<ul><li>引入http模块，express模块，body-parser模块<li>设置允许跨域请求和请求响应的数据类型<li>设置接口请求回调函数<li>请求回调函数中，取到获取的数据并遍历，向百度api发起请求<li>获取到百度的响应数据后push进数组，并对前端请求作出响应</ul><div class="highlighter-rouge"><pre class="highlight"><code>var http = require('http');
+var express = require('express');
+var app = express();  //实例化
+var key = 'OxLYdFmu3YS1haMUcaBmGMBK0P7PbOqb'; //百度api的key
+
+
+var bodyParser = require('body-parser');
+
+// 创建 application/x-www-form-urlencoded 编码解析
+// var urlencodedParser = bodyParser.urlencoded({ extended: false })
+app.use(bodyParser.json()); //json编码
+
+//设置跨域访问
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With,Content-Type");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
+
+//post请求,url/map
+app.post('/map',function(req,res){
+	var ipArr = req.body;
+	var result = Array();
+	for (var i = 0; i &lt; ipArr.length; i++) {
+		var tree = '';
+		var options = {  
+		    hostname: 'api.map.baidu.com',  
+		    port: 80,  
+		    path: '/location/ip?ak=' + key + "&amp;coor=bd09ll&amp;ip=" + ipArr[i],  
+		    method: 'GET'  
+		};  
+        // 向远程服务器端发送请求
+      	var getLocation = http.request(options, function(response){
+		   	response.on('data', function(data) {
+		      	tree += data;
+		      	result.push(tree); 
+		      	//避免缓存
+		      	tree = ''; 	
+		   	}); 
+		});   
+	    getLocation.end();   
+	     
+	}
+
+	//延后发送请求响应
+	setTimeout(function(){
+		res.status(200).send(result);
+	}, 500);
+	
+
+})
+
+//监听8081接口打印请求域名和端口
+var server = app.listen(8081, function () {
+
+  var host = server.address().address
+  var port = server.address().port
+
+  console.log("应用实例，访问地址为 http://%s:%s", host, port)
+
+})
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/BMap-points/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">BMap添加闪烁点</span> </a> <a class="link-to-post" href="/posts/file-upload/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">file-upload相关</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

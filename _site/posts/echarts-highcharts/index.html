@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-04-28-echarts-highcharts</title><meta name="description" content="1.说明：eCharts和highcharts功能基本相同，相较而言，highcharts图表基础配色较为美观，简单应用可选，但echarts可绘制多样类型的图，使用灵活"><link rel="canonical" href="http://localhost:4000/posts/echarts-highcharts/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/echarts-highcharts/"><meta property="og:type" content="website"><meta property="og:title" content="echarts-highcharts"><meta property="og:description" content="echarts-highcharts"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/echarts-highcharts/"><meta name="twitter:title" content="echarts-highcharts"><meta name="twitter:description" content="echarts-highcharts"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#charts">charts</a></div><p> echarts-highcharts</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">echarts-highcharts</h1><p class="post-meta"> <time datetime="2017-04-28">28-04-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>1.说明：eCharts和highcharts功能基本相同，相较而言，highcharts图表基础配色较为美观，简单应用可选，但echarts可绘制多样类型的图，使用灵活<p>2.引用用法差别：<ul><li><p>highcharts地图，中括号中为js地图文件 var world = Highcharts.geojson(Highcharts.maps[‘custom/world-palestine-highres’]);<li><p>highcharts饼状图等图表 $(‘#lang’).highcharts(option);<li><p>echarts图表，第二个选项为样式模板，图表与地图引用方式一样 var errorCol = echarts.init(document.getElementById(‘errorCol’),’macarons’); errorCol.setOption(option1);</ul><p>3.详解echarts相关配置项<p>echarts的option对象中：<ul><li>series 属性(值为数组)主要包含相关数据，图表类型以及图表特殊设置等。数组中包含的对象的属性：如data,值为数组，表示有多组数据。<ul><li>type:标识图表类型，主要有 line/scatter/map/pie等等，其中type值为map则可增加mapType属性，标识地图的区域，如值为‘china’表示中国地图，也可缩小至省份等。<li>itemStyle:可设置元素的样式。</ul><li>legend 属性表示图表的说明，标注多种类型的数据等。<li>title 属性表示图表的标题。<li>tooltip 表示鼠标放在某个点上时显示的内容。<li>visualMap 属性表示数据筛选器，其中可设置最大最小值，以及位于图标中的位置，是否可进行过滤筛选（calculate属性）。<li>dataRange 表示可拖动的数据轴线，可设置显示区间。<li>toolbox 表示数据视图、切换图表type、另存为图片的控件。<li>symbol 表示点的原件，可设置effect特效，以及symbolsize元件大小（可使用函数表示），</ul><p>echarts设置的模板如下：<div class="highlighter-rouge"><pre class="highlight"><code>chinaMap.setOption({
+textStyle:{
+    color:'#2f323b'
+},
+title: {
+    text: '省份分布',
+    left: 'center',
+    textStyle: {  
+        fontWeight: 'normal',              //标题颜色  
+        color: '#333'  
+    },  
+},
+tooltip: {
+    trigger: 'item'
+},
+legend: {
+    orient: 'vertical',
+    left: 'left',
+    data:['设备数量']
+},
+visualMap: {
+    min: minNum,
+    max: maxNum,
+    left: 'left',
+    top: 'bottom',
+    text: ['高','低'],           // 文本，默认为数值文本
+    calculable: true
+},
+toolbox: {
+    show: true,
+    orient: 'horizontal',
+    right: '20px',
+    top: 'top',
+    feature: {
+        dataView: {show: false,readOnly: true},
+        restore: {},
+        saveAsImage: {}
+    }
+},
+dataRange:{
+    show:true,
+    color:['#0073d6',"#3D77FF","#3DD8FF","#99FFFF",'#c7e9ff'],
+    min:0,
+    max:3000,
+    calculable:true,
+    textStyle:{
+        color:'#333'
+    }
+},
+series: [
+    {
+        name: '设备',
+        type: 'map',
+        mapType: 'china',
+        roam: false,
+        label: {
+            normal: {
+                show: true,
+                textStyle: {
+                    color: '#333'
+                }
+            },
+            emphasis: {
+                show: true
+            }
+        },
+        itemStyle:{
+            normal: {
+                borderColor: '#eee',
+                areaColor: '#c7e9ff'
+            },
+            emphasis: {
+                areaColor: '#a4edba'
+            }
+        },
+        data: dataArray
+    }
+]
+})
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/nodejs+express+mongo/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">nodejs+express+mongo构建项目</span> </a> <a class="link-to-post" href="/posts/BMap-points/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">BMap添加闪烁点</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

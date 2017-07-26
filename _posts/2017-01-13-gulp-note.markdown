@@ -1,0 +1,95 @@
+---
+layout: post
+title:  "gulp使用方法"
+crawlertitle: "2017-01-13-gulp-note"
+summary: "gulp使用方法"
+date:   20170113
+categories: posts
+tags: 'gulp'
+author: yunlei.ke
+---
+gulp使用方法以及防止页面缓存的处理方式
+#### gulp使用
+[参考文档](http://www.ydcss.com/archives/18)  
+1.本地安装gulp及其插件
+
+    npm install gulp --save-dev
+    npm install gulp-uglify --save-dev
+2.写package.json文件
+
+    {
+      "devDependencies": {
+        "gulp": "^3.9.1",
+        "gulp-imagemin": "^3.1.1",
+        "gulp-uglify": "^2.0.0",
+        "imagemin-pngcrush": "^5.0.0"
+      }
+    }
+    
+3.写gulpfile.js或者gruntfile.js
+
+    var gulp = require('gulp');
+    var imagemin = require('gulp-imagemin'),
+	htmlmin = require('gulp-htmlmin'),
+	pngcrush = require('imagemin-pngcrush'),
+	inifycss = require('gulp-minify-css'),
+	uglify = require('gulp-uglify'),//js压缩
+	rename = require('gulp-rename'),
+	notify = require('gulp-notify');
+
+    //gulp.task('img', function() {
+	//return gulp.src('kitwebfront/img1/**/*')
+	    //return gulp.src('kitwebend/img1/**/*')
+	// 	.pipe(imagemin({
+	// 		progressive: true,
+	// 		svgoPlugins: [{removeViewBox: false}],
+	// 		use: [pngcrush()]
+	// 	}))
+		// .pipe(gulp.dest('kitwebfront/img'))
+		// .pipe(gulp.dest('kitwebend/img'))
+		// .pipe(notify({ message: 'img task ok' }));
+    //});
+
+    gulp.task('jsmin', function() {
+	// return gulp.src('kitwebend/common.js')
+	return gulp.src('kitwebfront/scripts/script1/*.js')
+		.pipe(uglify({
+		    mangle: {excepts:['$state']}//不混淆某变量
+		}))
+		.pipe(gulp.dest('kitwebfront/scripts/services'));
+		// .pipe(notify({ message: 'css task ok' }));
+	});
+	gulp.task('default', function(){
+		gulp.run('jsmin');
+		//Watch .js files
+		// gulp.watch('kitwebfront/scripts/**/*.js', ['jsmin']);
+
+	});
+
+#### gulp打包时常见错误
+
+1.依赖项关系未写准确
+```
+标准依赖格式：
+define/require('angular','jquery',function(angular,jquery){
+})
+```
+2.$state.go()与resolve冲突
+    
+压缩并混淆变量名时，$state.go()与app.js中的resolve冲突；去掉所有resolve再压缩即可
+
+#### 页面缓存前端解决方法
+[参考文档](http://www.cnblogs.com/givebest/p/4707432.html)  
+gulp 给文件添加版本号后缀
+1. 安装gulp-asset-dev,并通过修改node_modules中的index.js修改添加版本号效果
+2. 将index.js中的输出src改为 src = src + "?v=" + verStr 即可
+3. 修改gulpfile.js,使得所有css/html/js都使用asset-rev插件进行添加版本号，img文件如有需要也可进行添加。
+    
+    
+#### 后端解决方法
+1.通过给请求的response header添加 头部
+Cache-Control:max-age = 0
+
+
+
+

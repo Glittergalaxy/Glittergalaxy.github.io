@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-01-13-gulp-note</title><meta name="description" content="gulp使用方法以及防止页面缓存的处理方式gulp使用参考文档1.本地安装gulp及其插件"><link rel="canonical" href="http://localhost:4000/posts/gulp-note/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/gulp-note/"><meta property="og:type" content="website"><meta property="og:title" content="gulp使用方法"><meta property="og:description" content="gulp使用方法"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/gulp-note/"><meta name="twitter:title" content="gulp使用方法"><meta name="twitter:description" content="gulp使用方法"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#gulp">gulp</a></div><p> gulp使用方法</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">gulp使用方法</h1><p class="post-meta"> <time datetime="2017-01-13">13-01-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>gulp使用方法以及防止页面缓存的处理方式<h4 id="gulp使用">gulp使用</h4><p><a href="http://www.ydcss.com/archives/18">参考文档</a><br /> 1.本地安装gulp及其插件<div class="highlighter-rouge"><pre class="highlight"><code>npm install gulp --save-dev
+npm install gulp-uglify --save-dev 2.写package.json文件
+
+{
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-uglify": "^2.0.0",
+    "imagemin-pngcrush": "^5.0.0"
+  }
+}
+</code></pre></div><p>3.写gulpfile.js或者gruntfile.js<div class="highlighter-rouge"><pre class="highlight"><code>var gulp = require('gulp');
+var imagemin = require('gulp-imagemin'),
+htmlmin = require('gulp-htmlmin'),
+pngcrush = require('imagemin-pngcrush'),
+inifycss = require('gulp-minify-css'),
+uglify = require('gulp-uglify'),//js压缩
+rename = require('gulp-rename'),
+notify = require('gulp-notify');
+
+//gulp.task('img', function() {
+//return gulp.src('kitwebfront/img1/**/*')
+    //return gulp.src('kitwebend/img1/**/*')
+// 	.pipe(imagemin({
+// 		progressive: true,
+// 		svgoPlugins: [{removeViewBox: false}],
+// 		use: [pngcrush()]
+// 	}))
+	// .pipe(gulp.dest('kitwebfront/img'))
+	// .pipe(gulp.dest('kitwebend/img'))
+	// .pipe(notify({ message: 'img task ok' }));
+//});
+
+gulp.task('jsmin', function() {
+// return gulp.src('kitwebend/common.js')
+return gulp.src('kitwebfront/scripts/script1/*.js')
+	.pipe(uglify({
+	    mangle: {excepts:['$state']}//不混淆某变量
+	}))
+	.pipe(gulp.dest('kitwebfront/scripts/services'));
+	// .pipe(notify({ message: 'css task ok' }));
+});
+gulp.task('default', function(){
+	gulp.run('jsmin');
+	//Watch .js files
+	// gulp.watch('kitwebfront/scripts/**/*.js', ['jsmin']);
+
+});
+</code></pre></div><h4 id="gulp打包时常见错误">gulp打包时常见错误</h4><p>1.依赖项关系未写准确<div class="highlighter-rouge"><pre class="highlight"><code>标准依赖格式：
+define/require('angular','jquery',function(angular,jquery){
+})
+</code></pre></div><p>2.$state.go()与resolve冲突<p>压缩并混淆变量名时，$state.go()与app.js中的resolve冲突；去掉所有resolve再压缩即可<h4 id="页面缓存前端解决方法">页面缓存前端解决方法</h4><p><a href="http://www.cnblogs.com/givebest/p/4707432.html">参考文档</a><br /> gulp 给文件添加版本号后缀<ol><li>安装gulp-asset-dev,并通过修改node_modules中的index.js修改添加版本号效果<li>将index.js中的输出src改为 src = src + “?v=” + verStr 即可<li>修改gulpfile.js,使得所有css/html/js都使用asset-rev插件进行添加版本号，img文件如有需要也可进行添加。</ol><h4 id="后端解决方法">后端解决方法</h4><p>1.通过给请求的response header添加 头部 Cache-Control:max-age = 0<div class="post-links"> <a class="link-to-post" href="/posts/file-upload/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">file-upload相关</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>
