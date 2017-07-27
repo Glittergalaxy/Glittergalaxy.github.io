@@ -1,0 +1,24 @@
+---
+layout: post
+title:  "oauth步骤"
+crawlertitle: "2017-07-27-oauth"
+summary: "oauth步骤"
+date:   20170727
+categories: posts
+tags: 'oauth'
+author: yunlei.ke
+---
+oAuth第三方授权或授权于第三方步骤
+
+### 1.将账户信息授权给第三方应用（dnakit 的 oauth） 
+- 第三方请求并跳转登录授权页
+- 输入本应用的帐号信息并登录，若已登录（通过cookie并校验是否超时判断）则显示授权页 
+此时需发送帐号信息至云端登录接口
+- 本应用帐号信息校验成功并返回用户账户信息且显示授权页  
+云端登录接口校验成功并返回用户信息
+    - 点击授权按钮返回第三方页面并携带accesstoken信息
+    - 点击切换帐号并返回登录授权页
+### 2.使用第三方应用的账户信息 （alexa skill 的 facebook 授权）
+- 请求第三方登录页（sdk或html）
+- 获取第三方登录成功后的用户信息
+- 取得accesstoken并成功授权
