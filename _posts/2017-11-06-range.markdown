@@ -8,94 +8,93 @@ categories: posts
 tags: 'html5'
 author: yunlei.ke
 ---
-```
-/*range panel*/
-.slider{
-    margin:0 2.6rem;
-    height:100%;
-}
-.slider>input[type='range']{
-    width:100%;
-    height: 0.3rem;
-    height:3.2rem\0;
-    border-radius: 0.3rem; /*将轨道设为圆角的*/
-    background: -webkit-linear-gradient(left,#f6a128, #f6a128) no-repeat #e1e1e1;
-    background-size:50% 100%;
-}
-input[type=range] {
-    -moz-appearance: none;
-    -webkit-appearance: none;  
-    padding:0;
-    border:0;
-    position:relative;
-    top:-.3rem;
-}
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 2rem;
-    width: 2rem;
-    margin-top: -.4rem; 
-    background: #ffffff; 
-    border-radius: 50%;
-    border: solid 1px #e1e1e1; 
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
-}
 
-/*moz*/
-input[type=range]::-moz-range-track {
-    height: 0.3rem;
-    border-radius: 0.3rem; 
-}
-input[type=range]::-moz-range-thumb {
-    -webkit-appearance: none;
-    height: 2rem;
-    width: 2rem;
-    margin-top: -.4rem; 
-    background: #ffffff; 
-    border-radius: 50%;
-    border: solid 1px #e1e1e1; 
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
-}
-input[type=range]::-moz-range-progress {
-    background:linear-gradient(#f6a128, #f6a128) no-repeat;
-    height: 0.3rem;    
-    border-radius: 0.3rem;
-}
+    /*range panel*/
+    .slider{
+        margin:0 2.6rem;
+        height:100%;
+    }
+    .slider>input[type='range']{
+        width:100%;
+        height: 0.3rem;
+        height:3.2rem\0;
+        border-radius: 0.3rem; /*将轨道设为圆角的*/
+        background: -webkit-linear-gradient(left,#f6a128, #f6a128) no-repeat #e1e1e1;
+        background-size:50% 100%;
+    }
+    input[type=range] {
+        -moz-appearance: none;
+        -webkit-appearance: none;  
+        padding:0;
+        border:0;
+        position:relative;
+        top:-.3rem;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.4rem; 
+        background: #ffffff; 
+        border-radius: 50%;
+        border: solid 1px #e1e1e1; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
+    }
 
-/*IE*/
-input[type=range]::-ms-track {
-    border-color: transparent;
-    color: transparent;
-    height:.3rem;
-    border-radius:.3rem; 
-}
+    /*moz*/
+    input[type=range]::-moz-range-track {
+        height: 0.3rem;
+        border-radius: 0.3rem; 
+    }
+    input[type=range]::-moz-range-thumb {
+        -webkit-appearance: none;
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.4rem; 
+        background: #ffffff; 
+        border-radius: 50%;
+        border: solid 1px #e1e1e1; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
+    }
+    input[type=range]::-moz-range-progress {
+        background:linear-gradient(#f6a128, #f6a128) no-repeat;
+        height: 0.3rem;    
+        border-radius: 0.3rem;
+    }
 
-input[type=range]::-ms-thumb {
-    height: 2rem;
-    width: 2rem;
-    margin-top: -.35rem; 
-    background: #ffffff; 
-    border-radius: 50%; 
-    border: solid 1px #e1e1e1;
-    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05); 
-}
+    /*IE*/
+    input[type=range]::-ms-track {
+        border-color: transparent;
+        color: transparent;
+        height:.3rem;
+        border-radius:.3rem; 
+    }
 
-input[type=range]::-ms-fill-lower {
-    height: .3rem;
-    border-radius: .3rem;
-    background: linear-gradient(#f6a128, #f6a128) no-repeat;
-}
+    input[type=range]::-ms-thumb {
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.35rem; 
+        background: #ffffff; 
+        border-radius: 50%; 
+        border: solid 1px #e1e1e1;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05); 
+    }
 
-input[type=range]::-ms-fill-upper {
-    height: .3rem;
-    border-radius: .3rem;
-    background: #e1e1e1;
-}
-/*range panel end*/
+    input[type=range]::-ms-fill-lower {
+        height: .3rem;
+        border-radius: .3rem;
+        background: linear-gradient(#f6a128, #f6a128) no-repeat;
+    }
 
-为兼容webkit
-需要配合js设置backgroundSize
-var points = document.getElementById("points");
-var value = points.value*10;
-points.style.backgroundSize = value+'% 100%';
-```
+    input[type=range]::-ms-fill-upper {
+        height: .3rem;
+        border-radius: .3rem;
+        background: #e1e1e1;
+    }
+    /*range panel end*/
+
+    为兼容webkit
+    需要配合js设置backgroundSize
+    var points = document.getElementById("points");
+    var value = points.value*10;
+    points.style.backgroundSize = value+'% 100%';

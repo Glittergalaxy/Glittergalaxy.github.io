@@ -15,66 +15,66 @@ author: yunlei.ke
 
 #### 2. 基于props书写组件
 - 父组件
-```
-<message :type="msg.type" :show="msg.show" :msg="msg.msg"  @visible-change="modalVisibleChange"></message>
-//绑定方法
-export default {
-    data(){
-        return {
-            msg:{
-                type:'loading',
-                show:true,
-                msg:'加载中'
-            }
-        }
-    },
-    methods:{
-        //set message box show/type/content/showtime
-        modalVisibleChange(val,msg,type,time){
-            this.msg.show = val;
-            if(msg){
-                this.msg.msg = msg;
-            }
-            if(type){
-                this.msg.type = type;
-            }
-            if(time){
-                setTimeout(() => {
-                    this.msg.show = false;
-                },time);
-            }
-        }
-    }
-}
-```
-- 子组件
-```
-<template>
-    <div v-if="show" class="message" transition="fade">
-        <div class="icons-box tcenter">
-            <img src="../assets/success.png" v-if="type=='success'">
-            <img src="../assets/success.png" v-if="type=='fail'">
-            <img src="../assets/error.png" v-if="type=='error'">
-            <img src="../assets/loading.png" v-if="type=='loading'" class="loading">
-        </div>
-        <div class="tcenter">{{msg}}</div>
-    </div>
-</template>
 
-export default {
-    name:'message',
-    props:['type','msg','show'],
-    watch:{
-        show:function(val){
-            if(val && this.type!='loading'){
-                setTimeout(() =>{
-                    this.$emit("visible-change",false);
-                },3000)
+    <message :type="msg.type" :show="msg.show" :msg="msg.msg"  @visible-change="modalVisibleChange"></message>
+    //绑定方法
+    export default {
+        data(){
+            return {
+                msg:{
+                    type:'loading',
+                    show:true,
+                    msg:'加载中'
+                }
+            }
+        },
+        methods:{
+            //set message box show/type/content/showtime
+            modalVisibleChange(val,msg,type,time){
+                this.msg.show = val;
+                if(msg){
+                    this.msg.msg = msg;
+                }
+                if(type){
+                    this.msg.type = type;
+                }
+                if(time){
+                    setTimeout(() => {
+                        this.msg.show = false;
+                    },time);
+                }
             }
         }
     }
-}
-```
+
+- 子组件
+
+    <template>
+        <div v-if="show" class="message" transition="fade">
+            <div class="icons-box tcenter">
+                <img src="../assets/success.png" v-if="type=='success'">
+                <img src="../assets/success.png" v-if="type=='fail'">
+                <img src="../assets/error.png" v-if="type=='error'">
+                <img src="../assets/loading.png" v-if="type=='loading'" class="loading">
+            </div>
+            <div class="tcenter">{{msg}}</div>
+        </div>
+    </template>
+
+    export default {
+        name:'message',
+        props:['type','msg','show'],
+        watch:{
+            show:function(val){
+                if(val && this.type!='loading'){
+                    setTimeout(() =>{
+                        this.$emit("visible-change",false);
+                    },3000)
+                }
+            }
+        }
+    }
+
 
 #### 3. 原理
 - 子组件通过props获取父组件的属性，通过$emit方法触发父组件定义的方法，父组件在响应方法中修改属性的show/type等的值。
