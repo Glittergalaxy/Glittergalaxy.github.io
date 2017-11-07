@@ -14,7 +14,7 @@ author: yunlei.ke
 - $parent 父子组件传递信息
 
 #### 2. 基于props书写组件
-- 父组件
+    - 父组件
 
     <message :type="msg.type" :show="msg.show" :msg="msg.msg"  @visible-change="modalVisibleChange"></message>
     //绑定方法
@@ -47,7 +47,7 @@ author: yunlei.ke
         }
     }
 
-- 子组件
+    - 子组件
 
     <template>
         <div v-if="show" class="message" transition="fade">
