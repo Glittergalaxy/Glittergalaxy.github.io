@@ -9,6 +9,7 @@ tags: 'html5'
 author: yunlei.ke
 ---
 HTML5原生range元素在不同浏览器中的样式不一样且不太美观，因此有两种方式实现较美观的range。一种是美化原生range元素，另一种则是自己实现一个range组件。
+```
     /*range panel*/
     .slider{
         margin:0 2.6rem;
@@ -98,3 +99,4 @@ HTML5原生range元素在不同浏览器中的样式不一样且不太美观，�
     var points = document.getElementById("points");
     var value = points.value*10;
     points.style.backgroundSize = value+'% 100%';
+```
