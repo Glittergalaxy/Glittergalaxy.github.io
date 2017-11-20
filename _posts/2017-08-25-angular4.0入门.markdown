@@ -38,135 +38,131 @@ ng g directive Module_Name
 ng g pipe Pipe_Name
 ```
 
-4. 创建的新项目目录结构
+4. 创建的新项目目录结构  
 ```
-project_name
-- node_modules
-- src
-    - app
-        - app.component.ts
-        - app.module.ts
-    - main.ts
-    - styles.css
-    - index.html
-    - systemjs.config.js
-    - tsconfig.json
-- package.json
+    project_name
+    - node_modules
+    - src
+        - app
+            - app.component.ts
+            - app.module.ts
+        - main.ts
+        - styles.css
+        - index.html
+        - systemjs.config.js
+        - tsconfig.json
+    - package.json
+
 ```
 
 5. component 书写规则
 ```
-1. 导入修饰符
-import { Component } from '@angular/core';
-2.声明component
-@Component({
-    selector:'my-app',
-    template:`
-    <h1>{{title}}</h1>
-    <input [(ngModel)]="hero.name"/>
-    `
-    或
-    templateUrl:'./a.html',
-    styles:[``],
-    或
-    styleUrls:['./a.css']
-    //使用``在ts中写html,双大括号进行单向数据绑定
-})
-3.导出
-export class AppComponent {}
-4.注：ngModel指令需从FormsMoule可选模块中导入
-app.modules.ts
-import { NgModule } from '@angular/core';
-import { BrowerModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'
-@NgModule({
-    imports:[
-        BrowserModule,
-        FormsModule
-    ],
-    declarations:[
-        AppComponent
-    ],
-    bootstrap:[AppComponent]
-})
-export class AppModule{}
-5.组件可提供生命周期钩子方法和接口
-export class AppComponent implements OnInit {
-    ngOnInit():void {
-        this.getHeroes
+    1. 导入修饰符
+    import { Component } from '@angular/core';
+    2.声明component
+    @Component({
+        selector:'my-app',
+        template:`
+        <h1>{{title}}</h1>
+        <input [(ngModel)]="hero.name"/>
+        `
+        或
+        templateUrl:'./a.html',
+        styles:[``],
+        或
+        styleUrls:['./a.css']
+        //使用``在ts中写html,双大括号进行单向数据绑定
+    })
+    3.导出
+    export class AppComponent {}
+    4.注：ngModel指令需从FormsMoule可选模块中导入
+    app.modules.ts
+    import { NgModule } from '@angular/core';
+    import { BrowerModule } from '@angular/platform-browser';
+    import { FormsModule } from '@angular/forms'
+    @NgModule({
+        imports:[
+            BrowserModule,
+            FormsModule
+        ],
+        declarations:[
+            AppComponent
+        ],
+        bootstrap:[AppComponent]
+    })
+    export class AppModule{}
+    5.组件可提供生命周期钩子方法和接口
+    export class AppComponent implements OnInit {
+        ngOnInit():void {
+            this.getHeroes
+        }
     }
-}
 ```
 
 6. service书写规则
 ```
-1.导入
-import { Injectable } from '@angular/core';
-
-2.声明
-@Injectable()
-
-3.导出
-export class HeroService {
-    getHeroes():Promise<Hero[]> {
-        return Promise.resolve(HEROES)
+    1.导入
+    import { Injectable } from '@angular/core';
+    2.声明
+    @Injectable()
+    3.导出
+    export class HeroService {
+        getHeroes():Promise<Hero[]> {
+            return Promise.resolve(HEROES)
+        }
     }
-}
-
-4.component中使用
-//服务提供商，注册
-- @NgModule({
-    providers:[HeroService]
-})
-//实例化
-- export class HeroComponent{
-    constructor({
-        private heroService:HeroService
+    4.component中使用
+    //服务提供商，注册
+    - @NgModule({
+        providers:[HeroService]
     })
-}
+    //实例化
+    - export class HeroComponent{
+        constructor({
+            private heroService:HeroService
+        })
+    }
 ```
 
 7. router书写
 ```
-1.index.html确保<head>顶部有一个<base href="...">
-
-2.app-routing.module.ts
-- 导入
-    import { RouterModule } from '@angular/router';
-    import { HeroesComponent } from './heroes.component'
-- 定义path
-    RouterModule.forRoot([
-        {
-            path:'heroes/:id',
-            component:HeroesComponent,
-            redirectTo:'name',
-            pathMatch:'full',
-        }
-    ])
-
-3.component中的链接
-<a router-link="/heroes"></a>
-<router-outlet></router-outlet>
+    1.index.html确保<head>顶部有一个<base href="...">
+    2.app-routing.module.ts
+    - 导入
+        import { RouterModule } from '@angular/router';
+        import { HeroesComponent } from './heroes.component'
+    - 定义path
+        RouterModule.forRoot([
+            {
+                path:'heroes/:id',
+                component:HeroesComponent,
+                redirectTo:'name',
+                pathMatch:'full',
+            }
+        ])
+    3.component中的链接
+    <a router-link="/heroes"></a>
+    <router-outlet></router-outlet>
 ```
 
 8. app.module根模块书写规则
 ```
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-@NgModule({
-    imports:[ BrowserModule],
-    providers: [Logger],
-    declarations:[AppComponent],
-    exports:[AppComponent],
-    bootstrap:[Appcomponent]
-})
-export class AppModules { }
-NgModule 是一个装饰器函数，接受一个用于描述模块属性的元数据对象，其中最重要的属性是：
-1. declarations 声明本模块所拥有的视图类，angular有三种视图类：组件、指令和管道。
-2. exports declarations的子集，可用于其他模块的组件模板。
-3. imports 本模块声明的组件模版需要的类所在的其他模块
-4. providers 服务的创建者，并加入到全局服务列表中，可用于应用任何部分。
-5. bootstrap 制定应用的主视图，只有根模块才能设置bootstrap属性。
+    import { NgModule } from '@angular/core';
+    import { BrowserModule } from '@angular/platform-browser';
+    @NgModule({
+        imports:[ BrowserModule],
+        providers: [Logger],
+        declarations:[AppComponent],
+        exports:[AppComponent],
+        bootstrap:[Appcomponent]
+    })
+    export class AppModules { }
+    NgModule 是一个装饰器函数，接受一个用于描述模块属性的元数据对象，其中最重要的属性是：
+    1. declarations 声明本模块所拥有的视图类，angular有三种视图类：组件、指令和管道。
+    2. exports declarations的子集，可用于其他模块的组件模板。
+    3. imports 本模块声明的组件模版需要的类所在的其他模块
+    4. providers 服务的创建者，并加入到全局服务列表中，可用于应用任何部分。
+    5. bootstrap 制定应用的主视图，只有根模块才能设置bootstrap属性。
 ```
 
 
