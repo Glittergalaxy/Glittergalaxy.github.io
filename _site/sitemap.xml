@@ -3,6 +3,15 @@
 
   
   <url>
+    <loc>http://localhost:4000/posts/html5-base/</loc>
+    
+      <lastmod>2017-11-20</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <url>
     <loc>http://localhost:4000/posts/layout-css/</loc>
     
       <lastmod>2017-11-17</lastmod>

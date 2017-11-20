@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-11-16-html5-base-note</title><meta name="description" content="补充html5基础知识"><link rel="canonical" href="http://localhost:4000/posts/html5-base/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/html5-base/"><meta property="og:type" content="website"><meta property="og:title" content="补充html5基础知识"><meta property="og:description" content="html5基础知识"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/html5-base/"><meta name="twitter:title" content="补充html5基础知识"><meta name="twitter:description" content="html5基础知识"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#css">css</a> <a href="/posts/#html5">html5</a></div><p> html5基础知识</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">补充html5基础知识</h1><p class="post-meta"> <time datetime="2017-11-20">20-11-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>补充html5基础知识<ol><li>meta对象<div class="highlighter-rouge"><pre class="highlight"><code>- content  'telephone=no','text/html;charset=gb2312','width=device-width;maximum-scale=1.0;user-scale=1.0;'
+- name 'format-detection','viewport'
+- httpEquiv 'charset','expires','set-cookie','Content-Type',
+</code></pre></div><li>html5新属性<ul><li>video [controls,autoplay,width,height,loop,src,preload] ogg文件适用于firefox、opera、chrome,safari文件必须是peg4类型。<li>audio [controls,autoplay,loop,src,preload]<li>drag drop 任何元素都可以拖放</ul><div class="highlighter-rouge"><pre class="highlight"><code> &lt;img ondragstart=drap(event) draggable="true" id="drag1"/&gt;
+ &lt;div ondrop="drop(event)" ondropover="allowDrop(event)" id="drop1"&gt;&lt;/div&gt;
+
+ function drap(ev){
+     ev.preventDefault();
+     ev.dataTransfer.setData("Text",ev.target.id) 
+ }
+
+ function allowDrop(ev){
+     ev.preventDefault();
+ }
+
+ function drop(ev){
+     ev.preventDefault();
+     var data = ev.dataTransfer.getData("Text");
+     ev.target.appendChild(document.getElementById(data));
+ }
+
+ 拖动开始：ondragstart,触发后设置被拖动数据类型和值
+ event.dataTransfer.setData("Text",ev.target.id);
+
+ 拖动到某一位置：ondragover,默认元素不可拖动，此时需阻止默认处理方法event.preventDefault();  
+
+ 拖动结束：ondrop,触发后获取到被拖动元素
+ var data = event.dataTransfer.getData("Text");
+ event.target.appendChild(document.getElementById(data));
+</code></pre></div></ol><ul><li><p>canvas [width,height] - svg<div class="highlighter-rouge"><pre class="highlight"><code>  1. 获取到canvas，创建context对象
+  var c = document.getElementById("canvas");
+  var ctx = c.getContext("2d");
+
+  2. 绘制线条
+  ctx.moveTo(10,10);//移动到某一个点
+  ctx.lineTo(150,50);//线条画到某一点
+  ctx.stroke();//填充
+
+  3. 绘制圆形
+  ctx.fillStyle="#000";//填色
+  ctx.beginPath();//开始
+  ctx.arc(x,y,r,startAngle,endAngle,顺时针或逆时针);//画圆
+  ctx.closePath();//结束
+  ctx.fill();//填充
+
+  4. 渐变
+  var rect = ctx.createLinearGradient(0,0,175,50);//矩形区域
+  rect.addColorStop(0,"#fff");
+  rect.addColorStop(1,"#000");//渐变色
+  ctx.fillStyle = rect;//设置渐变色为填充颜色
+  ctx.fillRect(0,0,175,50);//画矩形  
+
+  5. 图像
+  var img = new Image();
+  img.src = "flower.png";//创建img对象并设置其属性
+  ctx.drawImage(img,0,0);//画出图像
+
+  canvas与svg比较
+  1.依赖分辨率、不依赖
+  2.不支持事件处理器、支持事件处理器
+  3.弱的文本渲染能力、最适合带有大型渲染程序的应用程序，比如谷歌地图
+  4.适合图像密集型游戏，其中的许多对象会被频繁重绘、不适合游戏应用
+</code></pre></div><li><p>Geolocation API 定位<div class="highlighter-rouge"><pre class="highlight"><code>  if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(showPosition,showError);
+  }
+
+  function showPosition(position){
+      x.innerHTML = "latitude"+position.coords.latitude+"longtitude"+position.coords.longtitude;
+        
+  }
+
+  function showError(error){
+      switch(error.code){
+          case error.PERMISSION_DENIED:
+              return "user denied"
+              break;
+          case error.POSITION_UNAVAILABLE:
+              return "location unavailable"
+              break;
+          case error.TIMEOUT:
+              return "timeout"
+              break;
+          case error.UNKNOW_ERROR:
+              return "unknow error"
+              break;
+      }
+  }
+</code></pre></div><li><p>localStorage sessionStorage 客户端存储数据<div class="highlighter-rouge"><pre class="highlight"><code>  1. localStorage
+  无时间限制
+  2. sessionStorage
+  针对一个session的数据存储，当用户关闭浏览器窗口后数据被删除。
+</code></pre></div><li><p>应用缓存 application cache 除了IE不支持</ul><div class="post-links"> <a class="link-to-post" href="/posts/layout-css/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">左右布局</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>
