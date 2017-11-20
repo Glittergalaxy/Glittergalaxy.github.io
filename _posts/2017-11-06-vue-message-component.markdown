@@ -5,9 +5,11 @@ crawlertitle: "2017-11-06-vue-note"
 summary: "vue组件"
 date:   20171106
 categories: posts
-tags: 'vue 组件'
+tags: 'vue component'
 author: yunlei.ke
 ---
+vue实现消息组件
+
 #### 1. 组件之间传递信息的方法
 
 - vuex 所有组件之间都可以传递

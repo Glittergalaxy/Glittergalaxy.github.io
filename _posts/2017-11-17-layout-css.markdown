@@ -5,10 +5,11 @@ crawlertitle: "2017-11-17-layout-css-note"
 summary: "左右布局"
 date:   20171117
 categories: posts
-tags: 'css layout'
+tags: 'css'
 author: yunlei.ke
 ---
-#### 实现左边固定宽度，右边自适应布局  
+左边固定宽度，右边自适应布局的实现 
+
 ```
 .wrapper{
     height:800px;

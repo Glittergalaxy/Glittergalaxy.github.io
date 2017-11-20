@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-11-06-html5-note</title><meta name="description" content="HTML5原生range元素在不同浏览器中的样式不一样且不太美观，因此有两种方式实现较美观的range。一种是美化原生range元素，另一种则是自己实现一个range组件。"><link rel="canonical" href="http://localhost:4000/posts/range/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/range/"><meta property="og:type" content="website"><meta property="og:title" content="美化range元素"><meta property="og:description" content="原生range"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/range/"><meta name="twitter:title" content="美化range元素"><meta name="twitter:description" content="原生range"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#html5">html5</a></div><p> 原生range</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">美化range元素</h1><p class="post-meta"> <time datetime="2017-11-06">06-11-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>HTML5原生range元素在不同浏览器中的样式不一样且不太美观，因此有两种方式实现较美观的range。一种是美化原生range元素，另一种则是自己实现一个range组件。<div class="highlighter-rouge"><pre class="highlight"><code>    /*range panel*/
+    .slider{
+        margin:0 2.6rem;
+        height:100%;
+    }
+    .slider&gt;input[type='range']{
+        width:100%;
+        height: 0.3rem;
+        height:3.2rem\0;
+        border-radius: 0.3rem; /*将轨道设为圆角的*/
+        background: -webkit-linear-gradient(left,#f6a128, #f6a128) no-repeat #e1e1e1;
+        background-size:50% 100%;
+    }
+    input[type=range] {
+        -moz-appearance: none;
+        -webkit-appearance: none;  
+        padding:0;
+        border:0;
+        position:relative;
+        top:-.3rem;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.4rem; 
+        background: #ffffff; 
+        border-radius: 50%;
+        border: solid 1px #e1e1e1; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
+    }
+
+    /*moz*/
+    input[type=range]::-moz-range-track {
+        height: 0.3rem;
+        border-radius: 0.3rem; 
+    }
+    input[type=range]::-moz-range-thumb {
+        -webkit-appearance: none;
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.4rem; 
+        background: #ffffff; 
+        border-radius: 50%;
+        border: solid 1px #e1e1e1; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
+    }
+    input[type=range]::-moz-range-progress {
+        background:linear-gradient(#f6a128, #f6a128) no-repeat;
+        height: 0.3rem;    
+        border-radius: 0.3rem;
+    }
+
+    /*IE*/
+    input[type=range]::-ms-track {
+        border-color: transparent;
+        color: transparent;
+        height:.3rem;
+        border-radius:.3rem; 
+    }
+
+    input[type=range]::-ms-thumb {
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.35rem; 
+        background: #ffffff; 
+        border-radius: 50%; 
+        border: solid 1px #e1e1e1;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05); 
+    }
+
+    input[type=range]::-ms-fill-lower {
+        height: .3rem;
+        border-radius: .3rem;
+        background: linear-gradient(#f6a128, #f6a128) no-repeat;
+    }
+
+    input[type=range]::-ms-fill-upper {
+        height: .3rem;
+        border-radius: .3rem;
+        background: #e1e1e1;
+    }
+    /*range panel end*/
+
+    为兼容webkit
+    需要配合js设置backgroundSize
+    var points = document.getElementById("points");
+    var value = points.value*10;
+    points.style.backgroundSize = value+'% 100%';
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/vue-message-component/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">vue消息组件</span> </a> <a class="link-to-post" href="/posts/angular4/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">angular4.0入门</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

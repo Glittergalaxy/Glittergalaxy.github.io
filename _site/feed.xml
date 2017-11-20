@@ -6,668 +6,492 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 26 Jul 2017 15:05:27 +0800</pubDate>
-    <lastBuildDate>Wed, 26 Jul 2017 15:05:27 +0800</lastBuildDate>
+    <pubDate>Mon, 20 Nov 2017 14:54:20 +0800</pubDate>
+    <lastBuildDate>Mon, 20 Nov 2017 14:54:20 +0800</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
     
       <item>
-        <title>vue项目文档结构</title>
-        <description>&lt;p&gt;解构vue2.0项目内部文档结构&lt;/p&gt;
+        <title>左右布局</title>
+        <description>&lt;p&gt;左边固定宽度，右边自适应布局的实现&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- packageName
-    - build (auto，dev和prod中配置favicon.ico,utils中配置bootstap带的fonts的publicPath)
-        - utils.js 
-        - webpack.base.conf.js
-        - webpack.dev.conf.js
-        - webpack.prod.conf.js
-    - config (auto,通常需配置路径等参数)
-    - dist (npm run build 后生成)
-        - static
-        - index.html
-        - favicon.ico
-    - node_modules (依赖项)
-    - src (项目源文件)
-        - assets (css/fonts/img)
-        - components (common Components)
-            - topMenu
-            - leftMenu
-            - pager
-            - message
-        - service(http请求以及常量映射)
-            - http
-            - api
-            - commonList
-        - modules (路由模块)
-            - product
-            - order
-            - user
-        - router
-        - store
-        - App.vue
-        - main.js
-    - static (静态文件)
-        - js (如url配置文件，如serverurl/develop/product/prerelease)
-    - favicon.ico
-    - index.html
-    - package.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;1-indexhtml-书写规则&quot;&gt;1. index.html 书写规则&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;lang=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;en&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;life&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;app&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-包含html完整的文档结构
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h4 id=&quot;2-appvue-书写规则&quot;&gt;2. App.vue 书写规则&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;与一般的vue组件相同，包含html/js/css
- html部分
-&amp;lt;template&amp;gt;
-    &amp;lt;div id=&quot;app&quot;&amp;gt;
-        &amp;lt;alert-bar&amp;gt;&amp;lt;/alert-bar&amp;gt;
-        &amp;lt;top-menu v-if=&quot;index&quot;&amp;gt;&amp;lt;/top-menu&amp;gt;
-        &amp;lt;router-view&amp;gt;&amp;lt;/router-view&amp;gt;
-    &amp;lt;/div&amp;gt;
-&amp;lt;/template&amp;gt;
-通常根元素为index.html中定义的id为app的元素，且包含router-view元素（路由视图）
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h4 id=&quot;3-mainjs书写规则&quot;&gt;3. main.js书写规则&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.引入项目必备
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
-import router from './router'
-
-2.引入公用插件以及css
-import './assets/css/bootstrap.min.css'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
-
-Vue.use(ElementUI)
-
-3.创建vue实例
-new Vue({
-    el:'#app',
-    store,
-    router,
-    render: h =&amp;gt; h(App)
-}).$mount('#app')
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h4 id=&quot;4-routerjs书写规则&quot;&gt;4. router.js书写规则&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.引入必备插件
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-
-2.引入路由组件
-import Work from '../modules/work/work.vue'
-import WorkAuditing from '../modules/work/auditing.vue'
-import WorkAudited from '../modules/work/audited.vue'
-import License from '../modules/work/license.vue'
-import Authorize from '../modules/work/authorize.vue'
-
-3.使用方法
-Vue.use(VueRouter)
-const routes = [
-    {path:'/',redirect:'/login'},
-    {path:'/order',component:'Order',redirect:'/order/list',children:[
-        {path:'order/list',name:'orderList',component:orderList}
-    ]}
-]
-export default new VueRouter({routes})
-
-最后在main.js中注入
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h4 id=&quot;5-store书写规则-vuex官方文档&quot;&gt;5. store书写规则 &lt;a href=&quot;https://vuex.vuejs.org/zh-cn/mutations.html&quot;&gt;vuex官方文档&lt;/a&gt;&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.引入插件
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-2.使用方法
-Vue.use(Vuex)
-export default new Vuex.Store({
-    modules:{
-        
-    }
-})
-3. modules中书写
-- state
-    const state = {
-       current:0, 
-    }
-- getters
-    const getters = {
-        current:state =&amp;gt; state.current
-    }
-- actions
-    const actions = {
-        setCurrent({commit},page){
-            commit(SET_CURRENT,page)
-        }
-    }
-- mutations
-    const mutations = {
-        [SET_CURRENT](state,page){
-            state.current = page;
-        }
-    }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 16 Jun 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/vue-structure/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/vue-structure/</guid>
-        
-        <category>vue</category>
-        
-        
-        <category>posts</category>
-        
-      </item>
-    
-      <item>
-        <title>vue项目相关插件</title>
-        <description>&lt;p&gt;vue项目搭建过程中所需插件&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;所有插件在项目中使用大前提为&lt;/strong&gt; npm install –save 在项目运行时所需用到的插件&lt;/p&gt;
-
-&lt;h5 id=&quot;1-axios-用于发送http请求&quot;&gt;1. axios 用于发送http请求&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;引入方式
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import axios from 'axios'
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;所需设置
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//设置传输数据类型
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-//设置服务器url
-axios.defaults.baseURL = serviceUrl;
-//设置headers
-axios.defaults.headers.common = {
-  UserId:Cookies.get('UserId')
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.wrapper{
+    height:800px;
+    width:100%;
 }
-//配置请求方法，以下为发送文件上传请求示例
-export default {
-  file: function(url,data){
-      return new Promise((resolve,reject) =&amp;gt; {
-          let form = new FormData() //实例化一个formdata类型
-          form.append(file,data.file) //将所传文件放入formdata类型数据中
-          axios.post(url,form,{
-              method:'post',
-              headers:{'Content-Type':'multiple/form-data'} //设置传输文件格式为form-data类型
-          })
-          .then((response) =&amp;gt; {
-              resolve(response.data)
-          })
-          .catch((error) =&amp;gt; {
-              reject(error)
-          })
-      })
-  }
+.left{
+    width:200px;
+}
+.right{
+    height:100%;
 }
 &lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;2-关于es6中promise对象的使用&quot;&gt;2. 关于ES6中promise对象的使用&lt;/h5&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://es6.ruanyifeng.com/?search=promise&amp;amp;x=0&amp;amp;y=0#docs/promise&quot;&gt;阮一峰的说明&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;同jquery中定义的promise对象类似，prototype中有.then()方法和.catch方法&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- .then()方法可以有两个参数，分别为resolve和reject时的回调方法。
-- .catch()方法即为.then(null,reject)的别名，用于指定发生错误时的回调函数，同时.then()方法中制定的回调函数，若异步过程产生错误，也会被catch方法捕获
-- 一般来说，不要在then方法里面定义reject状告台的回调函数，总是使用catch方法,因为可以捕获到前面then方法执行的错误。
-&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-
-&lt;h5 id=&quot;3-js-cookie插件&quot;&gt;3. js-cookie插件&lt;/h5&gt;
-
-&lt;p&gt;cookie使用有两处 1&amp;gt; http请求头部获取cookie 2&amp;gt;登陆后设置cookie&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;引入方式
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import * as Cookies from 'js-cookie';
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;使用方法
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;设置cookie Cookies.set('userid','1234',{expires:1(单位天)})
-获取cookie Cookies.get('userid')
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;4-crypto-js插件&quot;&gt;4. crypto-js插件&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;引入方式
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;import SHA1 from 'crypto-js/sha1'
-或
-import CryptoJS from 'crypto-js'
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;使用方法
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SHA1(psw).toString()
-或
-CryptoJS.SHA1(psw).toString()
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;5-bootstrap样式&quot;&gt;5. bootstrap样式&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;引入方式
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;在main.js中
-import './assets/css/bootstrap.min.css'
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;6-element-ui插件及样式&quot;&gt;6. element-ui插件及样式&lt;/h5&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;引入方式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;在main.js中
-import ElementUI from 'elemnt-ui'
-import 'element-ui/lib/theme-default/index.css'
-
-Vue.use(ElementUI)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;ul&gt;
-  &lt;li&gt;使用方式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;在component中使用elemnt-ui中的元素，如
-&amp;lt;el-form&amp;gt;&amp;lt;/el-form&amp;gt; form表单中带相关校验
-&amp;lt;el-table&amp;gt;&amp;lt;/el-table&amp;gt; table带远程排序、选择某行、添加序号、隐藏内容等功能
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Wed, 14 Jun 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/vueproject/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/vueproject/</guid>
-        
-        <category>vue</category>
-        
-        
-        <category>posts</category>
-        
-      </item>
-    
-      <item>
-        <title>vue-cli使用</title>
-        <description>&lt;p&gt;关于vue脚手架vue-cli的使用&lt;/p&gt;
-
-&lt;h4 id=&quot;创建vue项目&quot;&gt;创建vue项目&lt;/h4&gt;
-
 &lt;ol&gt;
-  &lt;li&gt;安装vue-cli
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install -g vue-cli
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;创建基于webpack模版的新项目
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;vue init webpack my-project
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;安装项目依赖
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;--save 表示项目运行中使用到的，类似bootstrap/axios/js-cookie/element-ui/vuex/crypto-js
---save-dev 表示打包时用到的，如css-loader/file-loader/style-loader等
-执行 npm install
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;本地运行已搭建项目
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm run dev
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;更新版本到线上
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm run build
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h4 id=&quot;更新版本需注意配置&quot;&gt;更新版本需注意配置&lt;/h4&gt;
-&lt;ol&gt;
-  &lt;li&gt;资源相关引用路径修改
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;config中 build下 assetsPublicPath:'./'改为相对路径
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;bootstrap中的fonts引用&lt;/p&gt;
-
-    &lt;p&gt;由于bootstrap中字体引用路径为(‘../’),而打包后的fonts和css在同一目录下，所以修改config中的utils.js,原理为修改资源引用的路径为相对路径&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if(options.extract){
- return ExtractTextPlugin.extract({
-     user:loaders,
-     fallback:'vue-style-loader',
-     publicPath:'../../' //by add
- })
-}
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;favicon.ico问题&lt;/p&gt;
-
-    &lt;p&gt;favicon.ico在开发环境中放在根目录下，与index.html同级，但在打包到线上环境时，需进行设置，让其在index.html中自动生成favicon的引用&lt;/p&gt;
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;1.在webpack.dev.conf.js中修改
- new HtmlWebpackPlugin({
-     filename:'index.html',
-     template:'index.html',
-     favicon:'favicon.ico', //by add
-     inject:true
- })
-2.在webpack.prod.conf.js中修改
- new HtmlWebpackPlugin({
-     favicon:'favicon.ico' //by add
- })
-修改后打包生成的index.html中将包含favicon的引用
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;静态文件的问题&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;与src同级的目录static中存放着不进行修改和压缩的文件，使用中，可将环境配置文件serverurl放入其中。&lt;/p&gt;
-
-&lt;p&gt;本例中，在static/js目录中创建保存着三个不同环境的server路径的js文件，利用jenkins编译时选择相应环境，并通过jenkins修改对应环境的js文件名为serverurl来修改请求的server地址，从而达到根据不同环境来请求响应的服务器的目的(存在bug,待解决)。&lt;/p&gt;
-</description>
-        <pubDate>Wed, 14 Jun 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/vue-cli/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/vue-cli/</guid>
-        
-        <category>vue</category>
-        
-        
-        <category>posts</category>
-        
-      </item>
-    
-      <item>
-        <title>nodejs+express+mongo构建项目</title>
-        <description>&lt;p&gt;利用nodejs + express框架 + mongo数据库搭建后台环境进行前后台交互&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://my.oschina.net/chenhao901007/blog/312367&quot;&gt;参考文档1&lt;/a&gt;
-&lt;a href=&quot;http://cnodejs.org/topic/547293caa3e2aee40698df0b&quot;&gt;参考文档2&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;1安装文件&quot;&gt;1.安装文件&lt;/h3&gt;
-&lt;h4 id=&quot;1-安装并运行mongo&quot;&gt;1） 安装并运行mongo&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;官网下载msi安装包，点击下一步直至安装完成。&lt;/li&gt;
-  &lt;li&gt;安装服务：
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;安装完成后，一管理员身份运行cmd，cd到mongodb安装目录下的bin目录，然后输入：
-mongod --dbpath=&quot;mongodb安装目录\data&quot; --logpath=&quot;mongodb安装目录\log\log.txt&quot; --install --serviceName MongoDB --serviceDisplayName MongoDB
-此步骤中创建数据库目录同时创建日志文件，并将mongo安装为服务
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-  &lt;li&gt;另开一个cmd,切换到bin目录，然后输入mongo 启动数据库。&lt;/li&gt;
-  &lt;li&gt;启动后，可输入命令行创建数据库等。
-```&lt;/li&gt;
-  &lt;li&gt;show dbs&lt;/li&gt;
-  &lt;li&gt;use dbname&lt;/li&gt;
-  &lt;li&gt;db.”tablename”&lt;/li&gt;
-  &lt;li&gt;db.”tablename”.insert({insertObj})  //插入数据&lt;/li&gt;
-  &lt;li&gt;db.”tablename”.find()   //查询数据
-```
-    &lt;h4 id=&quot;2-安装-express--express-generator&quot;&gt;2） 安装 express + express-generator&lt;/h4&gt;
-  &lt;/li&gt;
-  &lt;li&gt;安装全局 express+express-generator即可&lt;/li&gt;
-  &lt;li&gt;创建项目
-    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;express packagename -e -e 表示支持ejs模板引擎 默认是jaden
-npm install 安装依赖项
-npm start 启动项目
-http://127.0.0.1:3000/在浏览器中查看
-&lt;/code&gt;&lt;/pre&gt;
-    &lt;/div&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;2创建项目&quot;&gt;2.创建项目&lt;/h3&gt;
-&lt;h5 id=&quot;1appjs中可修改模板引擎类型&quot;&gt;1）app.js中可修改模板引擎类型&lt;/h5&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;app.set('view engine','ejs') 改为
-app.set('view engine','html')
-再进行注册
-app.engine('.html',require('ejs').__express)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h5 id=&quot;2创建loginhtmlindexhtmlcenterhtml&quot;&gt;2）创建login.html,index.html,center.html&lt;/h5&gt;
-&lt;ul&gt;
-  &lt;li&gt;index页面创建链接，可跳转到login页面&lt;/li&gt;
-  &lt;li&gt;login页面创建form表单，可提交到center页面&lt;/li&gt;
-  &lt;li&gt;center页面可进行登出，回到index页面&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h5 id=&quot;3连接数据库文件&quot;&gt;3）连接数据库文件&lt;/h5&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var mongoose = require('mongoose');
-var db = mongoose.createConnection('mongodb:localhost/hello');//localhost后跟之前创建的数据库名，此处不可使用connect,
-var Shema = mongoose.Schema;
-var userSchema = new Schema({
-    name:String,
-    age:String
-})//创建新的模型
-exports.user = db.model('user',userSchema);//与user表关联
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h5 id=&quot;4路由配置&quot;&gt;4）路由配置&lt;/h5&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var express = require('express');
-var router = express.Router();
-var user = require('../models/user').user;
-
-router.get('/',function(req,res){
-    res.render('index',{title:'index'});//制定跳转后页面且指定其title
-})
-
-router.get('/login',function(req,res){
-    res.render('login',{title:'login'});//制定跳转后页面且指定其title
-})
-
-router.get('/logout',function(req,res){
-    res.render('logout',{title:'logout'});//制定跳转后页面且指定其title
-})
-
-//login的form表单提交为post方式
-router.post('/homepage',function(req,res){
-    var queryinfo = {name:req.body.name,age:req.body.age};
-    (function(){
-        //查询数据库中符合查询信息的数量
-        user.count(queryinfo,function(err,doc){
-            if(doc == 1){
-                console.log(queryinfo.name + &quot;:login success in &quot; + new Date())
-                res.render('homepage',{title:&quot;homepage&quot;});
-                //若为1则成功跳转到主页并提示信息
-            }else{
-                console.log(queryinfo.name + &quot;:failed success in &quot; + new Date())
-                res.redirect('/')
-                //否则返回首页
-            }
-        })
-    })(queryinfo);
-})
-
-modules.exports = router;
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;h3 id=&quot;3调试工具&quot;&gt;3.调试工具&lt;/h3&gt;
-&lt;p&gt;node-inspector&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;全局安装
-npm i -g node-inspector
-安装完成后进入项目目录
-node --debug ./bin/www
-即可在命令行查看错误信息
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 05 May 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/nodejs+express+mongo/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/nodejs+express+mongo/</guid>
-        
-        <category>nodejs</category>
-        
-        
-        <category>posts</category>
-        
-      </item>
-    
-      <item>
-        <title>echarts-highcharts</title>
-        <description>&lt;p&gt;1.说明：eCharts和highcharts功能基本相同，相较而言，highcharts图表基础配色较为美观，简单应用可选，但echarts可绘制多样类型的图，使用灵活&lt;/p&gt;
-
-&lt;p&gt;2.引用用法差别：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;highcharts地图，中括号中为js地图文件
-var world = Highcharts.geojson(Highcharts.maps[‘custom/world-palestine-highres’]);&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;highcharts饼状图等图表
-$(‘#lang’).highcharts(option);&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;echarts图表，第二个选项为样式模板，图表与地图引用方式一样
-var errorCol = echarts.init(document.getElementById(‘errorCol’),’macarons’);
-errorCol.setOption(option1);&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;3.详解echarts相关配置项&lt;/p&gt;
-
-&lt;p&gt;echarts的option对象中：&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;series 属性(值为数组)主要包含相关数据，图表类型以及图表特殊设置等。数组中包含的对象的属性：如data,值为数组，表示有多组数据。
+  &lt;li&gt;float方法或绝对定位方法
     &lt;ul&gt;
-      &lt;li&gt;type:标识图表类型，主要有 line/scatter/map/pie等等，其中type值为map则可增加mapType属性，标识地图的区域，如值为‘china’表示中国地图，也可缩小至省份等。&lt;/li&gt;
-      &lt;li&gt;itemStyle:可设置元素的样式。&lt;/li&gt;
+      &lt;li&gt;左边元素 float:left;或 position:absolute;&lt;/li&gt;
+      &lt;li&gt;右边元素 margin-left:200px;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;legend 属性表示图表的说明，标注多种类型的数据等。&lt;/li&gt;
-  &lt;li&gt;title 属性表示图表的标题。&lt;/li&gt;
-  &lt;li&gt;tooltip 表示鼠标放在某个点上时显示的内容。&lt;/li&gt;
-  &lt;li&gt;visualMap 属性表示数据筛选器，其中可设置最大最小值，以及位于图标中的位置，是否可进行过滤筛选（calculate属性）。&lt;/li&gt;
-  &lt;li&gt;dataRange 表示可拖动的数据轴线，可设置显示区间。&lt;/li&gt;
-  &lt;li&gt;toolbox 表示数据视图、切换图表type、另存为图片的控件。&lt;/li&gt;
-  &lt;li&gt;symbol 表示点的原件，可设置effect特效，以及symbolsize元件大小（可使用函数表示），&lt;/li&gt;
+  &lt;li&gt;flex布局
+    &lt;ul&gt;
+      &lt;li&gt;父元素 display:flex;&lt;/li&gt;
+      &lt;li&gt;右边 flex:1;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;table布局
+    &lt;ul&gt;
+      &lt;li&gt;父元素 display:table;&lt;/li&gt;
+      &lt;li&gt;左边、右边 display:table-cell;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;display:table-cell可实现以下功能
+    &lt;ul&gt;
+      &lt;li&gt;不定高元素垂直居中&lt;/li&gt;
+      &lt;li&gt;等高实现&lt;/li&gt;
+      &lt;li&gt;左侧定宽，右侧自适应布局&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Fri, 17 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/layout-css/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/layout-css/</guid>
+        
+        <category>css</category>
+        
+        
+        <category>posts</category>
+        
+      </item>
+    
+      <item>
+        <title>移动端适配方案</title>
+        <description>&lt;p&gt;移动端适配方案实现方式&lt;/p&gt;
+
+&lt;h4 id=&quot;移动端适配&quot;&gt;移动端适配&lt;/h4&gt;
+
+&lt;p&gt;一、 基于flexible插件的自适应&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;获取dpr,若已存在则使用当前dpr&lt;br /&gt;
+ dpr即 window.devicePixelRatio,dpr返回当前显示设备的物理像素分辨率与CSS像素分辨率的比率。简单来说，这告诉浏览器应该使用多少个屏幕的实际像素来绘制一个CSS像素。&lt;/li&gt;
+  &lt;li&gt;设置viewport中的scale = 1/dpr
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scale=no&quot; /&gt;
+  &lt;/li&gt;
+  &lt;li&gt;根据deviceWidth以及dpr计算并设置rem大小&lt;br /&gt;
+ deviceWidth/dpr&amp;gt;540按照540计算，rem = deviceWidth*dpr/10，设计图分成10等分每一等分为rem的单位大小;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;二、 基于vw的自适应&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;vw浏览器支持&lt;br /&gt;
+CSS3新加属性，chrome/firefox/IE9+支持。android browser4.4+支持，chrome for android39支持。1vw等于视窗高度的1%。视窗高度指window.innerHeight包含了底部滚动条高度（如果有的话）&lt;/li&gt;
+  &lt;li&gt;其余相关属性&lt;br /&gt;
+vh:viewport height
+vmin:vw 和vh中较小的那个。&lt;/li&gt;
+  &lt;li&gt;postcss插件&lt;br /&gt;
+根据vw计算原理，如果是ipone6,1vw=7.5px。那么我们在写css时只需以vw为单位写样式。利用postcss-px-to-viewport,书写样式时以px为单位，插件会编译自动计算其对应的vw值。相当于浏览器自己提供了一套适应性解决方案，和flexible原理相同，但是由于计算误差，可能会存在问题。&lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Thu, 16 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/mobile-flexible/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/mobile-flexible/</guid>
+        
+        <category>mobile</category>
+        
+        
+        <category>posts</category>
+        
+      </item>
+    
+      <item>
+        <title>vue消息组件</title>
+        <description>&lt;p&gt;vue实现消息组件&lt;/p&gt;
+
+&lt;h4 id=&quot;1-组件之间传递信息的方法&quot;&gt;1. 组件之间传递信息的方法&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;vuex 所有组件之间都可以传递&lt;/li&gt;
+  &lt;li&gt;props 父子组件传递信息&lt;/li&gt;
+  &lt;li&gt;$parent 父子组件传递信息&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;echarts设置的模板如下：&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;chinaMap.setOption({
-textStyle:{
-    color:'#2f323b'
-},
-title: {
-    text: '省份分布',
-    left: 'center',
-    textStyle: {  
-        fontWeight: 'normal',              //标题颜色  
-        color: '#333'  
-    },  
-},
-tooltip: {
-    trigger: 'item'
-},
-legend: {
-    orient: 'vertical',
-    left: 'left',
-    data:['设备数量']
-},
-visualMap: {
-    min: minNum,
-    max: maxNum,
-    left: 'left',
-    top: 'bottom',
-    text: ['高','低'],           // 文本，默认为数值文本
-    calculable: true
-},
-toolbox: {
-    show: true,
-    orient: 'horizontal',
-    right: '20px',
-    top: 'top',
-    feature: {
-        dataView: {show: false,readOnly: true},
-        restore: {},
-        saveAsImage: {}
-    }
-},
-dataRange:{
-    show:true,
-    color:['#0073d6',&quot;#3D77FF&quot;,&quot;#3DD8FF&quot;,&quot;#99FFFF&quot;,'#c7e9ff'],
-    min:0,
-    max:3000,
-    calculable:true,
-    textStyle:{
-        color:'#333'
-    }
-},
-series: [
-    {
-        name: '设备',
-        type: 'map',
-        mapType: 'china',
-        roam: false,
-        label: {
-            normal: {
-                show: true,
-                textStyle: {
-                    color: '#333'
-                }
-            },
-            emphasis: {
-                show: true
+&lt;h4 id=&quot;2-基于props书写组件&quot;&gt;2. 基于props书写组件&lt;/h4&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 父组件
+
+&amp;lt;message :type=&quot;msg.type&quot; :show=&quot;msg.show&quot; :msg=&quot;msg.msg&quot;  @visible-change=&quot;modalVisibleChange&quot;&amp;gt;&amp;lt;/message&amp;gt;
+//绑定方法
+export default {
+    data(){
+        return {
+            msg:{
+                type:'loading',
+                show:true,
+                msg:'加载中'
             }
-        },
-        itemStyle:{
-            normal: {
-                borderColor: '#eee',
-                areaColor: '#c7e9ff'
-            },
-            emphasis: {
-                areaColor: '#a4edba'
+        }
+    },
+    methods:{
+        //set message box show/type/content/showtime
+        modalVisibleChange(val,msg,type,time){
+            this.msg.show = val;
+            if(msg){
+                this.msg.msg = msg;
             }
-        },
-        data: dataArray
+            if(type){
+                this.msg.type = type;
+            }
+            if(time){
+                setTimeout(() =&amp;gt; {
+                    this.msg.show = false;
+                },time);
+            }
+        }
     }
-]
-})
+}
+
+- 子组件
+
+&amp;lt;template&amp;gt;
+    &amp;lt;div v-if=&quot;show&quot; class=&quot;message&quot; transition=&quot;fade&quot;&amp;gt;
+        &amp;lt;div class=&quot;icons-box tcenter&quot;&amp;gt;
+            &amp;lt;img src=&quot;../assets/success.png&quot; v-if=&quot;type=='success'&quot;&amp;gt;
+            &amp;lt;img src=&quot;../assets/success.png&quot; v-if=&quot;type=='fail'&quot;&amp;gt;
+            &amp;lt;img src=&quot;../assets/error.png&quot; v-if=&quot;type=='error'&quot;&amp;gt;
+            &amp;lt;img src=&quot;../assets/loading.png&quot; v-if=&quot;type=='loading'&quot; class=&quot;loading&quot;&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div class=&quot;tcenter&quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/template&amp;gt;
+
+export default {
+    name:'message',
+    props:['type','msg','show'],
+    watch:{
+        show:function(val){
+            if(val &amp;amp;&amp;amp; this.type!='loading'){
+                setTimeout(() =&amp;gt;{
+                    this.$emit(&quot;visible-change&quot;,false);
+                },3000)
+            }
+        }
+    }
+}
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
+&lt;h4 id=&quot;3-原理&quot;&gt;3. 原理&lt;/h4&gt;
+&lt;ul&gt;
+  &lt;li&gt;子组件通过props获取父组件的属性，通过$emit方法触发父组件定义的方法，父组件在响应方法中修改属性的show/type等的值。&lt;/li&gt;
+  &lt;li&gt;当父组件需要显示消息组件时，将show/type/msg等属性内容传递给子组件，当用户手动点击关闭子组件时，子组件利用$emit触发父组件对应的方法修改响应的show/type/msg属性并通过props传递给子组件。&lt;/li&gt;
+&lt;/ul&gt;
+
 </description>
-        <pubDate>Fri, 28 Apr 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/echarts-highcharts/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/echarts-highcharts/</guid>
+        <pubDate>Mon, 06 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/vue-message-component/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/vue-message-component/</guid>
         
-        <category>charts</category>
+        <category>vue</category>
+        
+        <category>component</category>
+        
+        
+        <category>posts</category>
+        
+      </item>
+    
+      <item>
+        <title>美化range元素</title>
+        <description>&lt;p&gt;HTML5原生range元素在不同浏览器中的样式不一样且不太美观，因此有两种方式实现较美观的range。一种是美化原生range元素，另一种则是自己实现一个range组件。&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    /*range panel*/
+    .slider{
+        margin:0 2.6rem;
+        height:100%;
+    }
+    .slider&amp;gt;input[type='range']{
+        width:100%;
+        height: 0.3rem;
+        height:3.2rem\0;
+        border-radius: 0.3rem; /*将轨道设为圆角的*/
+        background: -webkit-linear-gradient(left,#f6a128, #f6a128) no-repeat #e1e1e1;
+        background-size:50% 100%;
+    }
+    input[type=range] {
+        -moz-appearance: none;
+        -webkit-appearance: none;  
+        padding:0;
+        border:0;
+        position:relative;
+        top:-.3rem;
+    }
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.4rem; 
+        background: #ffffff; 
+        border-radius: 50%;
+        border: solid 1px #e1e1e1; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
+    }
+
+    /*moz*/
+    input[type=range]::-moz-range-track {
+        height: 0.3rem;
+        border-radius: 0.3rem; 
+    }
+    input[type=range]::-moz-range-thumb {
+        -webkit-appearance: none;
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.4rem; 
+        background: #ffffff; 
+        border-radius: 50%;
+        border: solid 1px #e1e1e1; 
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
+    }
+    input[type=range]::-moz-range-progress {
+        background:linear-gradient(#f6a128, #f6a128) no-repeat;
+        height: 0.3rem;    
+        border-radius: 0.3rem;
+    }
+
+    /*IE*/
+    input[type=range]::-ms-track {
+        border-color: transparent;
+        color: transparent;
+        height:.3rem;
+        border-radius:.3rem; 
+    }
+
+    input[type=range]::-ms-thumb {
+        height: 2rem;
+        width: 2rem;
+        margin-top: -.35rem; 
+        background: #ffffff; 
+        border-radius: 50%; 
+        border: solid 1px #e1e1e1;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05); 
+    }
+
+    input[type=range]::-ms-fill-lower {
+        height: .3rem;
+        border-radius: .3rem;
+        background: linear-gradient(#f6a128, #f6a128) no-repeat;
+    }
+
+    input[type=range]::-ms-fill-upper {
+        height: .3rem;
+        border-radius: .3rem;
+        background: #e1e1e1;
+    }
+    /*range panel end*/
+
+    为兼容webkit
+    需要配合js设置backgroundSize
+    var points = document.getElementById(&quot;points&quot;);
+    var value = points.value*10;
+    points.style.backgroundSize = value+'% 100%';
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+</description>
+        <pubDate>Mon, 06 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/range/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/range/</guid>
+        
+        <category>html5</category>
+        
+        
+        <category>posts</category>
+        
+      </item>
+    
+      <item>
+        <title>angular4.0入门</title>
+        <description>&lt;p&gt;angular4.0入门笔记&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;安装脚手架或者quickstart
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;npm install -g angular-cli
+或
+git clone https://github.com/angular/quickstart.git quickstart
+npm install
+npm start
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;创建工程项目
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ng new Project_Name
+cd Project_Name
+ng serve
+或
+cd quick start
+npm install
+npm start
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;angular-cli其他命令
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ng g component Component_Name
+ng g service Service_Name
+ng g directive Module_Name
+ng g pipe Pipe_Name
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;创建的新项目目录结构&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; - node_modules
+ - src
+     - app
+         - app.component.ts
+         - app.module.ts
+     - main.ts
+     - styles.css
+     - index.html
+     - systemjs.config.js
+     - tsconfig.json
+ - package.json
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;component 书写规则&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 1. 导入修饰符
+ import { Component } from '@angular/core';
+
+ 2.声明component
+ @Component({
+     selector:'my-app',
+     template:`
+     &amp;lt;h1&amp;gt;&amp;lt;/h1&amp;gt;
+     &amp;lt;input [(ngModel)]=&quot;hero.name&quot;/&amp;gt;
+     `
+     或
+     templateUrl:'./a.html',
+     styles:[``],
+     或
+     styleUrls:['./a.css']
+     //使用``在ts中写html,双大括号进行单向数据绑定
+ })
+
+ 3.导出
+ export class AppComponent {}
+
+ 4.注：ngModel指令需从FormsMoule可选模块中导入
+ app.modules.ts
+ import { NgModule } from '@angular/core';
+ import { BrowerModule } from '@angular/platform-browser';
+ import { FormsModule } from '@angular/forms'
+ @NgModule({
+     imports:[
+         BrowserModule,
+         FormsModule
+     ],
+     declarations:[
+         AppComponent
+     ],
+     bootstrap:[AppComponent]
+ })
+ export class AppModule{}
+
+ 5.组件可提供生命周期钩子方法和接口
+ export class AppComponent implements OnInit {
+     ngOnInit():void {
+         this.getHeroes
+     }
+ }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;service书写规则&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 1.导入
+ import { Injectable } from '@angular/core';
+
+ 2.声明
+ @Injectable()
+
+ 3.导出
+ export class HeroService {
+     getHeroes():Promise&amp;lt;Hero[]&amp;gt; {
+         return Promise.resolve(HEROES)
+     }
+ }
+
+ 4.component中使用
+ //服务提供商，注册
+ - @NgModule({
+     providers:[HeroService]
+ })
+ //实例化
+ - export class HeroComponent{
+     constructor({
+         private heroService:HeroService
+     })
+ }
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;router书写&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; 1.index.html确保&amp;lt;head&amp;gt;顶部有一个&amp;lt;base href=&quot;...&quot;&amp;gt;
+ 2.app-routing.module.ts
+ - 导入
+     import { RouterModule } from '@angular/router';
+     import { HeroesComponent } from './heroes.component'
+ - 定义path
+     RouterModule.forRoot([
+         {
+             path:'heroes/:id',
+             component:HeroesComponent,
+             redirectTo:'name',
+             pathMatch:'full',
+         }
+     ])
+ 3.component中的链接
+ &amp;lt;a router-link=&quot;/heroes&quot;&amp;gt;&amp;lt;/a&amp;gt;
+ &amp;lt;router-outlet&amp;gt;&amp;lt;/router-outlet&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;app.module根模块书写规则&lt;/p&gt;
+
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; import { NgModule } from '@angular/core';
+ import { BrowserModule } from '@angular/platform-browser';
+ @NgModule({
+     imports:[ BrowserModule],
+     providers: [Logger],
+     declarations:[AppComponent],
+     exports:[AppComponent],
+     bootstrap:[Appcomponent]
+ })
+ export class AppModules { }
+    
+ NgModule 是一个装饰器函数，接受一个用于描述模块属性的元数据对象，其中最重要的属性是：
+ 1. declarations 声明本模块所拥有的视图类，angular有三种视图类：组件、指令和管道。
+ 2. exports declarations的子集，可用于其他模块的组件模板。
+ 3. imports 本模块声明的组件模版需要的类所在的其他模块
+ 4. providers 服务的创建者，并加入到全局服务列表中，可用于应用任何部分。
+ 5. bootstrap 制定应用的主视图，只有根模块才能设置bootstrap属性。
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Fri, 25 Aug 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/angular4/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/angular4/</guid>
+        
+        <category>angular</category>
         
         
         <category>posts</category>

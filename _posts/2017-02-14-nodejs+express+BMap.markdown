@@ -5,7 +5,7 @@ crawlertitle: "2017-02-14-iplocate"
 summary: "node+express+BMap"
 date:   20170214
 categories: posts
-tags: 'BMap'
+tags: 'BMap nodejs'
 author: yunlei.ke
 ---
 利用前端发送ip数组，node+express接收到后组装url发送请求到百度地图api并返回请求结果数组给前端

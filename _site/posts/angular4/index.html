@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-08-25-vue-note</title><meta name="description" content="angular4.0入门笔记"><link rel="canonical" href="http://localhost:4000/posts/angular4/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/angular4/"><meta property="og:type" content="website"><meta property="og:title" content="angular4.0入门"><meta property="og:description" content="angular4.0入门"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/angular4/"><meta name="twitter:title" content="angular4.0入门"><meta name="twitter:description" content="angular4.0入门"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#angular">angular</a></div><p> angular4.0入门</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">angular4.0入门</h1><p class="post-meta"> <time datetime="2017-08-25">25-08-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>angular4.0入门笔记<ol><li>安装脚手架或者quickstart<div class="highlighter-rouge"><pre class="highlight"><code>npm install -g angular-cli
+或
+git clone https://github.com/angular/quickstart.git quickstart
+npm install
+npm start
+</code></pre></div><li>创建工程项目<div class="highlighter-rouge"><pre class="highlight"><code>ng new Project_Name
+cd Project_Name
+ng serve
+或
+cd quick start
+npm install
+npm start
+</code></pre></div><li>angular-cli其他命令<div class="highlighter-rouge"><pre class="highlight"><code>ng g component Component_Name
+ng g service Service_Name
+ng g directive Module_Name
+ng g pipe Pipe_Name
+</code></pre></div><li><p>创建的新项目目录结构<div class="highlighter-rouge"><pre class="highlight"><code> - node_modules
+ - src
+     - app
+         - app.component.ts
+         - app.module.ts
+     - main.ts
+     - styles.css
+     - index.html
+     - systemjs.config.js
+     - tsconfig.json
+ - package.json
+</code></pre></div><li><p>component 书写规则<div class="highlighter-rouge"><pre class="highlight"><code> 1. 导入修饰符
+ import { Component } from '@angular/core';
+
+ 2.声明component
+ @Component({
+     selector:'my-app',
+     template:`
+     &lt;h1&gt;&lt;/h1&gt;
+     &lt;input [(ngModel)]="hero.name"/&gt;
+     `
+     或
+     templateUrl:'./a.html',
+     styles:[``],
+     或
+     styleUrls:['./a.css']
+     //使用``在ts中写html,双大括号进行单向数据绑定
+ })
+
+ 3.导出
+ export class AppComponent {}
+
+ 4.注：ngModel指令需从FormsMoule可选模块中导入
+ app.modules.ts
+ import { NgModule } from '@angular/core';
+ import { BrowerModule } from '@angular/platform-browser';
+ import { FormsModule } from '@angular/forms'
+ @NgModule({
+     imports:[
+         BrowserModule,
+         FormsModule
+     ],
+     declarations:[
+         AppComponent
+     ],
+     bootstrap:[AppComponent]
+ })
+ export class AppModule{}
+
+ 5.组件可提供生命周期钩子方法和接口
+ export class AppComponent implements OnInit {
+     ngOnInit():void {
+         this.getHeroes
+     }
+ }
+</code></pre></div><li><p>service书写规则<div class="highlighter-rouge"><pre class="highlight"><code> 1.导入
+ import { Injectable } from '@angular/core';
+
+ 2.声明
+ @Injectable()
+
+ 3.导出
+ export class HeroService {
+     getHeroes():Promise&lt;Hero[]&gt; {
+         return Promise.resolve(HEROES)
+     }
+ }
+
+ 4.component中使用
+ //服务提供商，注册
+ - @NgModule({
+     providers:[HeroService]
+ })
+ //实例化
+ - export class HeroComponent{
+     constructor({
+         private heroService:HeroService
+     })
+ }
+</code></pre></div><li><p>router书写<div class="highlighter-rouge"><pre class="highlight"><code> 1.index.html确保&lt;head&gt;顶部有一个&lt;base href="..."&gt;
+ 2.app-routing.module.ts
+ - 导入
+     import { RouterModule } from '@angular/router';
+     import { HeroesComponent } from './heroes.component'
+ - 定义path
+     RouterModule.forRoot([
+         {
+             path:'heroes/:id',
+             component:HeroesComponent,
+             redirectTo:'name',
+             pathMatch:'full',
+         }
+     ])
+ 3.component中的链接
+ &lt;a router-link="/heroes"&gt;&lt;/a&gt;
+ &lt;router-outlet&gt;&lt;/router-outlet&gt;
+</code></pre></div><li><p>app.module根模块书写规则<div class="highlighter-rouge"><pre class="highlight"><code> import { NgModule } from '@angular/core';
+ import { BrowserModule } from '@angular/platform-browser';
+ @NgModule({
+     imports:[ BrowserModule],
+     providers: [Logger],
+     declarations:[AppComponent],
+     exports:[AppComponent],
+     bootstrap:[Appcomponent]
+ })
+ export class AppModules { }
+    
+ NgModule 是一个装饰器函数，接受一个用于描述模块属性的元数据对象，其中最重要的属性是：
+ 1. declarations 声明本模块所拥有的视图类，angular有三种视图类：组件、指令和管道。
+ 2. exports declarations的子集，可用于其他模块的组件模板。
+ 3. imports 本模块声明的组件模版需要的类所在的其他模块
+ 4. providers 服务的创建者，并加入到全局服务列表中，可用于应用任何部分。
+ 5. bootstrap 制定应用的主视图，只有根模块才能设置bootstrap属性。
+</code></pre></div></ol><div class="post-links"> <a class="link-to-post" href="/posts/range/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">美化range元素</span> </a> <a class="link-to-post" href="/posts/oauth/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">oauth步骤</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

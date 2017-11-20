@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-05-02-angular1-form-validate</title><meta name="description" content=" input输入框 ng-model 进行双向绑定即可 select框 结合ng-options 和 ng-model进行绑定 "><link rel="canonical" href="http://localhost:4000/posts/angular1-form-validate/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/angular1-form-validate/"><meta property="og:type" content="website"><meta property="og:title" content="angular1表单校验"><meta property="og:description" content="angular1表单校验"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/angular1-form-validate/"><meta name="twitter:title" content="angular1表单校验"><meta name="twitter:description" content="angular1表单校验"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#angular">angular</a></div><p> angular1表单校验</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">angular1表单校验</h1><p class="post-meta"> <time datetime="2017-05-02">02-05-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><ol><li><p>input输入框<p>ng-model 进行双向绑定即可<li><p>select框<p>结合ng-options 和 ng-model进行绑定<li><p>input type = radio 单选框<p>value不同，name相同,ng-model绑定同一个值，该值会自动对应相应的value<li><p>input type = checkbox 复选框<p>常见的是定义一个对象数组，对象中存放status属性和值属性，提交时遍历并组合相关值,获取时仍需遍历赋值相关的status,checkbox中的 ng-model 绑定相应对象的 status 属性。<li><p>img input type = file<p>img ng-src中默认赋值一个上传图片的icon的url,上传后改变该url的值, ==图片是否上传需进行手动校验==。</ol><hr /><p>6.关于表单校验<div class="highlighter-rouge"><pre class="highlight"><code>form元素：
+    name属性必须有，ng-submit为提交时调用的方法;
+
+需结合type=submit按钮：
+    ng-disabled = name.$invalid;
+
+input type=text name=text:
+    常用required；
+    minlength/maxlength;
+    配合help-block:
+        ng-show = name.text.$dirty &amp;&amp; name.text.$invalid;
+        进行输入校验
+    
+input type = url/email等特殊格式:
+    配合help-block:
+        ng-show = name.text.$dirty &amp;&amp; name.text.$invalid;
+        进行输入校验
+        
+input type = text,手机号输入
+    ng-pattern = /^1[3|5|7|8][0-9]{9}$/;
+    配合help-block:
+        ng-show = name.text.$dirty &amp;&amp; name.text.$invalid;
+        进行输入校验
+</code></pre></div><div class="post-links"> <a class="link-to-post" href="/posts/nodejs+express+mongo/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">nodejs+express+mongo构建项目</span> </a> <a class="link-to-post" href="/posts/echarts-highcharts/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">echarts-highcharts</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

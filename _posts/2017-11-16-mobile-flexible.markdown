@@ -5,9 +5,11 @@ crawlertitle: "2017-11-16-mobile-flexible-note"
 summary: "移动端 适配"
 date:   20171116
 categories: posts
-tags: 'mobile flexible'
+tags: 'mobile'
 author: yunlei.ke
 ---
+移动端适配方案实现方式
+
 #### 移动端适配
 
 一、 基于flexible插件的自适应

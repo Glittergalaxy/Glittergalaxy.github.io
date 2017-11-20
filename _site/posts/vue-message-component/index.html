@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-11-06-vue-note</title><meta name="description" content="vue实现消息组件"><link rel="canonical" href="http://localhost:4000/posts/vue-message-component/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/vue-message-component/"><meta property="og:type" content="website"><meta property="og:title" content="vue消息组件"><meta property="og:description" content="vue组件"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/vue-message-component/"><meta name="twitter:title" content="vue消息组件"><meta name="twitter:description" content="vue组件"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#vue">vue</a> <a href="/posts/#component">component</a></div><p> vue组件</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">vue消息组件</h1><p class="post-meta"> <time datetime="2017-11-06">06-11-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>vue实现消息组件<h4 id="1-组件之间传递信息的方法">1. 组件之间传递信息的方法</h4><ul><li>vuex 所有组件之间都可以传递<li>props 父子组件传递信息<li>$parent 父子组件传递信息</ul><h4 id="2-基于props书写组件">2. 基于props书写组件</h4><div class="highlighter-rouge"><pre class="highlight"><code>- 父组件
+
+&lt;message :type="msg.type" :show="msg.show" :msg="msg.msg"  @visible-change="modalVisibleChange"&gt;&lt;/message&gt;
+//绑定方法
+export default {
+    data(){
+        return {
+            msg:{
+                type:'loading',
+                show:true,
+                msg:'加载中'
+            }
+        }
+    },
+    methods:{
+        //set message box show/type/content/showtime
+        modalVisibleChange(val,msg,type,time){
+            this.msg.show = val;
+            if(msg){
+                this.msg.msg = msg;
+            }
+            if(type){
+                this.msg.type = type;
+            }
+            if(time){
+                setTimeout(() =&gt; {
+                    this.msg.show = false;
+                },time);
+            }
+        }
+    }
+}
+
+- 子组件
+
+&lt;template&gt;
+    &lt;div v-if="show" class="message" transition="fade"&gt;
+        &lt;div class="icons-box tcenter"&gt;
+            &lt;img src="../assets/success.png" v-if="type=='success'"&gt;
+            &lt;img src="../assets/success.png" v-if="type=='fail'"&gt;
+            &lt;img src="../assets/error.png" v-if="type=='error'"&gt;
+            &lt;img src="../assets/loading.png" v-if="type=='loading'" class="loading"&gt;
+        &lt;/div&gt;
+        &lt;div class="tcenter"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+export default {
+    name:'message',
+    props:['type','msg','show'],
+    watch:{
+        show:function(val){
+            if(val &amp;&amp; this.type!='loading'){
+                setTimeout(() =&gt;{
+                    this.$emit("visible-change",false);
+                },3000)
+            }
+        }
+    }
+}
+</code></pre></div><h4 id="3-原理">3. 原理</h4><ul><li>子组件通过props获取父组件的属性，通过$emit方法触发父组件定义的方法，父组件在响应方法中修改属性的show/type等的值。<li>当父组件需要显示消息组件时，将show/type/msg等属性内容传递给子组件，当用户手动点击关闭子组件时，子组件利用$emit触发父组件对应的方法修改响应的show/type/msg属性并通过props传递给子组件。</ul><div class="post-links"> <a class="link-to-post" href="/posts/mobile-flexible/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">移动端适配方案</span> </a> <a class="link-to-post" href="/posts/range/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">美化range元素</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>
