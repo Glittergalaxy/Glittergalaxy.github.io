@@ -6,9 +6,333 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 20 Nov 2017 15:14:14 +0800</pubDate>
-    <lastBuildDate>Mon, 20 Nov 2017 15:14:14 +0800</lastBuildDate>
+    <pubDate>Mon, 04 Dec 2017 13:48:36 +0800</pubDate>
+    <lastBuildDate>Mon, 04 Dec 2017 13:48:36 +0800</lastBuildDate>
     <generator>Jekyll v3.5.1</generator>
+    
+      <item>
+        <title>数组以及对象方法总结</title>
+        <description>&lt;p&gt;数组以及对象的常用方法&lt;/p&gt;
+&lt;h4 id=&quot;一-数组&quot;&gt;一、 数组&lt;/h4&gt;
+&lt;ol&gt;
+  &lt;li&gt;Array.prototype.forEach() 按升序为数组中每个元素执行一次提供的函数。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;arr.forEach(callback(currentValue,index,array){
+ //函数接收三个参数，thisArg可选，当执行时用作this的值    
+}，thisArg)
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;notice:无法中止或跳出forEach循环，除非抛出一个异常，不可链式调用。如果使用箭头函数表达式传入函数参数，thisArg会被忽略，因为箭头函数在词法上版定了this值。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.prototype.map()  创建一个新数组，其结果是该数组中每个元素都调用一个提供的函数后的结果。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;let numbers = [1,5,10,15];
+let doubles = numbers.map(x =&amp;gt; x**2);
+//doubles is now [1,25,100,225]
+let new_array = arr.map(function callback(currentValue,index,array){
+ return element for new_array;
+},thisArg)
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.prototype.filter() 创建一个新数组，其包含通过所提供函数实现的测试的所有元素。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;function isBigEnough(value){
+ return value &amp;gt;= 10;
+}
+var filtered = [12,5,3,129,44].filter(isBigEnough);
+//filterd is [12,129,44];
+var new_array = arr.filter(callback(currentValue,index,array),thisArg);
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.prototype.includes() 用来判断一个数组是否包含一个指定的值，返回true或false
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;arr.includes(searchElement,fromIndex)
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array,prototype.some() | Array,prototype.every() | Array.prototype.find() 测试数组中的某些元素是否通过提供的函数的测试,返回bool
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const isBigEnough = (element,index,array) =&amp;gt; {
+ return element &amp;gt; 10;
+}
+arr.some(callback,thisArg)
+var passed = [12,5,8,1,4].some(isBigEnough);
+// passed is true
+var passed = [12,5,8,1,4].every(isBigEnough);
+// passed is false
+如果找到一个符合条件的值，some返回true。
+如果找到一个不符合条件的值，every返回false。
+如果找到一个符合条件的值，find返回该值。
+如果找到一个符合条件的值，findIndex返回该索引。
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array,prototype.reduce() 对累加器和数组中的元素，从左至右应用一个函数
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;arr.reduce(callback,initialValue);
+//四个参数，第一个参数表示列加气累加回调的返回值，他是上一次调用回调时返回的累计值，或initialValue
+callback(accumulator,currentValue,currentIndex,array);
+initialValue用作第一个调用callback的accumulator的值，如果没有提供初始值，则将使用第一个元素，在没有初始值的空数组上调用reduce将报错。
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.prototype.copyWithin()  复制数组的一部分到同数组的另一位置
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;arr.copyyWithin(target,start,end);
+target表示索引，复制序列到该位置，如果为负数，从末尾开始计算，大于等于arr.length,将不会发生拷贝
+如果end被忽略，copyWithin将会复制到arr.length;
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.prototype.toLocaleString()  数组中的元素使用各自的toLocaleString方法转成字符串，这些字符串使用一个特定语言环境的字符串（“，”）隔开&lt;/li&gt;
+  &lt;li&gt;Array.from() 想要转换成数组的为伪数组对象或可迭代对象。 与map不同之处在于可以对伪数组对象或刻碟带对象进行转换。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Array.from(arraylike,mapFn,thisArg)
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.observe(arr,callback) 每次arr发生任何变化时，回调函数将被调用，调用参数为所有变化按发生顺序组成的数组。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;callback
+每当数组发生变化时，使用如下参数调用该函数：
+- changes
+  用于表示变化的对象数组。每个变化对象的属性如下：
+name: 变化的属性名。
+object: 变化后的数组。
+type: 用于表示变化类型的字符串。其取值为&quot;add&quot;、&quot;update&quot;、&quot;delete&quot;或 &quot;splice&quot;之一。
+oldValue: 仅用于&quot;update&quot;和&quot;delete&quot;类型。变化之前的取值。
+index: 仅用于&quot;splice&quot;类型。变化发生所在索引。
+removed: 仅用于&quot;splice&quot;类型。被删除元素组成的数组。
+addedCount: 仅用于&quot;splice&quot;类型。被添加的元素数量。
+    
+通过Array方法如 Array.prototype.pop( ) 触发的变化将被报告成&quot;splice&quot;变化，长度不变但索引赋值发生变化的将被报告成&quot;update&quot;变化。
+    
+var arr = ['a', 'b', 'c'];
+
+Array.observe(arr, function(changes) {
+  console.log(changes);
+});
+    
+arr[1] = 'B';
+// [{type: 'update', object: &amp;lt;arr&amp;gt;, name: '1', oldValue: 'b'}]
+    
+arr[3] = 'd';
+// [{type: 'splice', object: &amp;lt;arr&amp;gt;, index: 3, removed: [], addedCount: 1}]
+    
+arr.splice(1, 2, 'beta', 'gamma', 'delta');
+// [{type: 'splice', object: &amp;lt;arr&amp;gt;, index: 1, removed: ['B', 'c'], addedCount: 3}]
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Array.of(arguments) 创建一个具有可变数量参数的新数组实例&lt;br /&gt;
+Array.of(7) //[7]&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&quot;二对象&quot;&gt;二、对象&lt;/h4&gt;
+&lt;ol&gt;
+  &lt;li&gt;Object.keys 返回一个由一个给定对象的自身可枚举属性组成的数组，数组中属性名的排列顺序和for …… in循环便利该对象时返回的顺序一致（两者的主要区别是for in循环还会枚举其原型链上的属性）
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/* Array 对象 */ 
+let arr = [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;];
+console.log(Object.keys(arr)); 
+// ['0', '1', '2']
+/* Object 对象 */ 
+let obj = { foo: &quot;bar&quot;, baz: 42 }, 
+ keys = Object.keys(obj);
+// [&quot;foo&quot;,&quot;baz&quot;]
+/* 类数组 对象 */ 
+let obj = { 0 : &quot;a&quot;, 1 : &quot;b&quot;, 2 : &quot;c&quot;};
+console.log(Object.keys(obj)); 
+// ['0', '1', '2']
+// 类数组 对象, 随机 key 排序 
+let anObj = { 100: 'a', 2: 'b', 7: 'c' }; 
+console.log(Object.keys(anObj)); 
+// ['2', '7', '100']
+/* getFoo 是个不可枚举的属性 */ 
+var my_obj = Object.create(
+{}, 
+{ getFoo : { value : function () { return this.foo } } }
+);
+my_obj.foo = 1;
+console.log(Object.keys(my_obj)); 
+// ['foo']
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Object.assign(target,……sources) 用于将所有可枚举属性的值从一个或多个源对象复制到目标对象，他将返回目标对象。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;如果目标对象中的属性具有相同的键，则属性将被源中的属性覆盖。后来的源的属性将类似地覆盖早先的属性。
+继承属性和不可枚举属性是不能被拷贝的
+var obj = {a:1};
+var copy = Object.assign({},obj);
+//{a:1}
+针对深拷贝，需要使用其他方法，因为Object.assign()拷贝的是属性值，如果源对象的属性值是一个指向对象的引用，他也只拷贝那个引用值。
+let obj1 = {a:0,b:{c:0}};
+let obj2 = Object.assign({},obj1);
+console.log(JSON.stringify(obj2));
+obj1.b.c = 3;
+console.log(JSON.stringify(obj2));
+//{a:0,b:{c:3}}
+var o1 = {a:1};
+var o2 = {b:2};
+var 03 = {c:3};
+var obj = Object.assign(o1,o2,o3);
+console.log(obj);//{a:1,b:2,c:3}
+console.log(o1);//{a:1,b:2,c:3}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Fri, 24 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/array-object/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/array-object/</guid>
+        
+        <category>array</category>
+        
+        
+        <category>posts</category>
+        
+      </item>
+    
+      <item>
+        <title>异步请求方法</title>
+        <description>&lt;p&gt;由vue项目看常用异步请求方法语法以及ES6异步请求方法&lt;/p&gt;
+&lt;h4 id=&quot;一promise&quot;&gt;一、Promise&lt;/h4&gt;
+&lt;ol&gt;
+  &lt;li&gt;Promise对象是一个构造函数，用来生成Promise实例,接受一个函数作为参数，而该函数的两个参数分别是resolve和reject。他们是两个函数，由js引擎提供，不用自己部署。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const promise = new Promise(function(resolve,reject){
+ if(){
+     resolve(value);
+ }else{
+     reject(error);
+ }
+})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Promise实例生成以后，可以用then方法分别指定resolved状态和rejected状态的回调函数。&lt;/li&gt;
+  &lt;li&gt;如果调用resolve和reject函数时带有参数，那么他们的参数会被传递给回调函数。&lt;/li&gt;
+  &lt;li&gt;resolve函数的参数除了是正常的值以外，还可能是另一个Promise实例,
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const p1 = new Promise(function(resolve,reject){
+// ... 
+});
+const p2 = new Promise(function(resolve,reject){
+ // ...
+ resolve(p1);
+})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;上面代码中，p1和p2都是Promise实例，但是p2的resolve方法将p1作为参数，即一个异步操作的结果是返回另一个异步操作。
+注意，这里p1的状态就会传递给p2，也就是说，p1的状态决定了p2的状态，如果p1的状态是pending,那么p2的回调函数就会等待p1的状态改变。&lt;/li&gt;
+  &lt;li&gt;Promise实例具有then方法，也就是说，then方法是定义在原型对象Promise.prototype上的。他的作用式微Promise实例添加状态改变时的回调函数。then方法的第一个参数是resolved状态的回调函数，第二个参数是rejected状态的回调函数。then方法返回的是一个新的Promise实例，因此可以采用链式写法，即then方法后面再调用另一个then方法。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;getJSON(&quot;/post.json&quot;).then(function(json){
+ return json.post;
+}).then(function(post){
+ //...
+})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;p&gt;上面的代码使用then方法，依次指定了两个回调函数，第一个回调函数完成以后，会将返回结果作为参数，传入第二个回调函数。第一个then方法指定的回调函数，返回的是另一个promise对象，这时，第二个then方法指定的回调函数，就会等待这个新的Promise对象状态发生变化再调用相应方法。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;catch方法是.then(null,rejection)的别名，用于指定发生错误时的回调函数。一般来说，不要在then方法中定义reject状态的回调函数（即then的第二个参数），总是使用catch方法。理由是catch方法可以捕获前面then方法执行中的错误，也更接近同步的写法（try/catch）。因此，建议总是使用catch方法，而不是用then 方法中的第二个参数。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;promise.then(function(data){
+ // success
+}).catch(function(data){
+ // error
+})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;h4 id=&quot;二fetch&quot;&gt;二、fetch&lt;/h4&gt;
+  &lt;/li&gt;
+  &lt;li&gt;浏览器兼容：firefox 39以上，chrome42以上&lt;/li&gt;
+  &lt;li&gt;原理：基于Promise实现，无论如何，都会返回一个promise实例&lt;/li&gt;
+  &lt;li&gt;当接收到一个代表错误的http状态码时，从fetch()返回的Promise不会被标记为reject,及时状态码是404或500，相反她会将promise状态标记为resolve，仅当网络故障或请求被阻止时，才会标记为reject。&lt;/li&gt;
+  &lt;li&gt;默认情况下,fetch不会从服务端发送或接受任何cookies,如果站点依赖于用户session,则会导致未经认证的请求。（要发送cookies,必须设置credentials选项）&lt;/li&gt;
+  &lt;li&gt;fetch用法以及相关api
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if (window.fetch) {
+ let myInit = {
+     credentials: 'include',//设置发送请求时自动发送cookies
+     method: type,
+     headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json'
+     },//对象或包含 ByteString 值的对象字面量。
+     mode: &quot;cors&quot;,// 可选值为cors/no-cors/same-origin
+     cache: &quot;force-cache&quot;//强制缓存
+ }
+
+ //将body转为json对象，也可能是Blob,BufferSource,FormData、URLSearchParams或者USVString对象。注意get或者head方法的请求不能包含body信息。
+ if (type == 'POST') {
+     Object.defineProperty(myInit, 'body', {
+         value: JSON.stringify(data)
+     })
+ }
+    
+ try {
+     //返回response
+     const response = await fetch(url, myInit);
+     //response对象可以处理多种格式，json()/blob()/arrayBuffer()/formData()/text()
+     //response格式处理完后返回的是一个Promise对象，需要.then或者 await后才能使用
+     const responseJson = await response.json();
+     return responseJson
+ } catch (error) {
+     throw new Error(error)
+ }
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;get请求示例
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//html
+fetch('user.html').then(function(response){
+ return response.text();
+}).then(function(body){
+ document.body.innerHTML = body;
+})
+//图片
+var myImage = document.querySelector('img');
+fetch('flower.jpg').then(function(response){
+ return response.blob();
+})
+.then(function(myBlob){
+ var objectURL = URL.createObjectURL(myBlob);
+ myImage.src = objectURL;
+})
+//JSON
+fetch(url)
+.then(function(response){
+ return response.json();
+}).then(function(data){
+ console.log(data);
+}).catch(function(error){
+ console.log(&quot;oops,error&quot;);
+})
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+    &lt;h4 id=&quot;三awaitasync&quot;&gt;三、await/async&lt;/h4&gt;
+  &lt;/li&gt;
+  &lt;li&gt;async表示函数里有异步操作，await表示紧跟在后面的表达式需要等待结果。&lt;/li&gt;
+  &lt;li&gt;async函数的返回值是promise对象，可以用then方法指定下一步的操作。同时也可以作为await命令的参数。&lt;/li&gt;
+  &lt;li&gt;async函数返回的Promise对象，必须等到内部所有的await命令后面的Promise对象执行完，才会发生状态改变。
+    &lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;async function timeout(ms){
+ await new Promise((resolve) =&amp;gt; {
+     setTimeout(resolve,ms);
+ })
+}
+async function asyncPrint(value,ms){
+ await timeout(ms);
+ console.log(value);
+}
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+</description>
+        <pubDate>Wed, 22 Nov 2017 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/posts/promise-async/</link>
+        <guid isPermaLink="true">http://localhost:4000/posts/promise-async/</guid>
+        
+        <category>promise</category>
+        
+        
+        <category>posts</category>
+        
+      </item>
     
       <item>
         <title>补充html5基础知识</title>
@@ -248,209 +572,6 @@ vmin:vw 和vh中较小的那个。&lt;/li&gt;
         <guid isPermaLink="true">http://localhost:4000/posts/mobile-flexible/</guid>
         
         <category>mobile</category>
-        
-        
-        <category>posts</category>
-        
-      </item>
-    
-      <item>
-        <title>vue消息组件</title>
-        <description>&lt;p&gt;vue实现消息组件&lt;/p&gt;
-
-&lt;h4 id=&quot;1-组件之间传递信息的方法&quot;&gt;1. 组件之间传递信息的方法&lt;/h4&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;vuex 所有组件之间都可以传递&lt;/li&gt;
-  &lt;li&gt;props 父子组件传递信息&lt;/li&gt;
-  &lt;li&gt;$parent 父子组件传递信息&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&quot;2-基于props书写组件&quot;&gt;2. 基于props书写组件&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- 父组件
-
-&amp;lt;message :type=&quot;msg.type&quot; :show=&quot;msg.show&quot; :msg=&quot;msg.msg&quot;  @visible-change=&quot;modalVisibleChange&quot;&amp;gt;&amp;lt;/message&amp;gt;
-//绑定方法
-export default {
-    data(){
-        return {
-            msg:{
-                type:'loading',
-                show:true,
-                msg:'加载中'
-            }
-        }
-    },
-    methods:{
-        //set message box show/type/content/showtime
-        modalVisibleChange(val,msg,type,time){
-            this.msg.show = val;
-            if(msg){
-                this.msg.msg = msg;
-            }
-            if(type){
-                this.msg.type = type;
-            }
-            if(time){
-                setTimeout(() =&amp;gt; {
-                    this.msg.show = false;
-                },time);
-            }
-        }
-    }
-}
-
-- 子组件
-
-&amp;lt;template&amp;gt;
-    &amp;lt;div v-if=&quot;show&quot; class=&quot;message&quot; transition=&quot;fade&quot;&amp;gt;
-        &amp;lt;div class=&quot;icons-box tcenter&quot;&amp;gt;
-            &amp;lt;img src=&quot;../assets/success.png&quot; v-if=&quot;type=='success'&quot;&amp;gt;
-            &amp;lt;img src=&quot;../assets/success.png&quot; v-if=&quot;type=='fail'&quot;&amp;gt;
-            &amp;lt;img src=&quot;../assets/error.png&quot; v-if=&quot;type=='error'&quot;&amp;gt;
-            &amp;lt;img src=&quot;../assets/loading.png&quot; v-if=&quot;type=='loading'&quot; class=&quot;loading&quot;&amp;gt;
-        &amp;lt;/div&amp;gt;
-        &amp;lt;div class=&quot;tcenter&quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;/div&amp;gt;
-&amp;lt;/template&amp;gt;
-
-export default {
-    name:'message',
-    props:['type','msg','show'],
-    watch:{
-        show:function(val){
-            if(val &amp;amp;&amp;amp; this.type!='loading'){
-                setTimeout(() =&amp;gt;{
-                    this.$emit(&quot;visible-change&quot;,false);
-                },3000)
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;3-原理&quot;&gt;3. 原理&lt;/h4&gt;
-&lt;ul&gt;
-  &lt;li&gt;子组件通过props获取父组件的属性，通过$emit方法触发父组件定义的方法，父组件在响应方法中修改属性的show/type等的值。&lt;/li&gt;
-  &lt;li&gt;当父组件需要显示消息组件时，将show/type/msg等属性内容传递给子组件，当用户手动点击关闭子组件时，子组件利用$emit触发父组件对应的方法修改响应的show/type/msg属性并通过props传递给子组件。&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Mon, 06 Nov 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/vue-message-component/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/vue-message-component/</guid>
-        
-        <category>vue</category>
-        
-        <category>component</category>
-        
-        
-        <category>posts</category>
-        
-      </item>
-    
-      <item>
-        <title>美化range元素</title>
-        <description>&lt;p&gt;HTML5原生range元素在不同浏览器中的样式不一样且不太美观，因此有两种方式实现较美观的range。一种是美化原生range元素，另一种则是自己实现一个range组件。&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    /*range panel*/
-    .slider{
-        margin:0 2.6rem;
-        height:100%;
-    }
-    .slider&amp;gt;input[type='range']{
-        width:100%;
-        height: 0.3rem;
-        height:3.2rem\0;
-        border-radius: 0.3rem; /*将轨道设为圆角的*/
-        background: -webkit-linear-gradient(left,#f6a128, #f6a128) no-repeat #e1e1e1;
-        background-size:50% 100%;
-    }
-    input[type=range] {
-        -moz-appearance: none;
-        -webkit-appearance: none;  
-        padding:0;
-        border:0;
-        position:relative;
-        top:-.3rem;
-    }
-    input[type=range]::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        height: 2rem;
-        width: 2rem;
-        margin-top: -.4rem; 
-        background: #ffffff; 
-        border-radius: 50%;
-        border: solid 1px #e1e1e1; 
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
-    }
-
-    /*moz*/
-    input[type=range]::-moz-range-track {
-        height: 0.3rem;
-        border-radius: 0.3rem; 
-    }
-    input[type=range]::-moz-range-thumb {
-        -webkit-appearance: none;
-        height: 2rem;
-        width: 2rem;
-        margin-top: -.4rem; 
-        background: #ffffff; 
-        border-radius: 50%;
-        border: solid 1px #e1e1e1; 
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05);
-    }
-    input[type=range]::-moz-range-progress {
-        background:linear-gradient(#f6a128, #f6a128) no-repeat;
-        height: 0.3rem;    
-        border-radius: 0.3rem;
-    }
-
-    /*IE*/
-    input[type=range]::-ms-track {
-        border-color: transparent;
-        color: transparent;
-        height:.3rem;
-        border-radius:.3rem; 
-    }
-
-    input[type=range]::-ms-thumb {
-        height: 2rem;
-        width: 2rem;
-        margin-top: -.35rem; 
-        background: #ffffff; 
-        border-radius: 50%; 
-        border: solid 1px #e1e1e1;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.10), 0 3px 3px 0 rgba(0,0,0,0.05); 
-    }
-
-    input[type=range]::-ms-fill-lower {
-        height: .3rem;
-        border-radius: .3rem;
-        background: linear-gradient(#f6a128, #f6a128) no-repeat;
-    }
-
-    input[type=range]::-ms-fill-upper {
-        height: .3rem;
-        border-radius: .3rem;
-        background: #e1e1e1;
-    }
-    /*range panel end*/
-
-    为兼容webkit
-    需要配合js设置backgroundSize
-    var points = document.getElementById(&quot;points&quot;);
-    var value = points.value*10;
-    points.style.backgroundSize = value+'% 100%';
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-</description>
-        <pubDate>Mon, 06 Nov 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/posts/range/</link>
-        <guid isPermaLink="true">http://localhost:4000/posts/range/</guid>
-        
-        <category>html5</category>
         
         
         <category>posts</category>
