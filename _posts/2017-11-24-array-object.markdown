@@ -9,6 +9,7 @@ tags: 'array'
 author: yunlei.ke
 ---
 数组以及对象的常用方法
+
 #### 一、 数组
 1. Array.prototype.forEach() 按升序为数组中每个元素执行一次提供的函数。  
 ```

@@ -58,6 +58,14 @@ export default {
 - .then()方法可以有两个参数，分别为resolve和reject时的回调方法。
 - .catch()方法即为.then(null,reject)的别名，用于指定发生错误时的回调函数，同时.then()方法中制定的回调函数，若异步过程产生错误，也会被catch方法捕获
 - 一般来说，不要在then方法里面定义reject状告台的回调函数，总是使用catch方法,因为可以捕获到前面then方法执行的错误。
+IE9和一些低版本的浏览器对ES6新语法不支持(如promise)，需要安装babel-polyfill
+npm install babel-polyfill --save-dev
+安装完成后引用方式有三种：
+1.require("babel-polyfill");
+2.import "babel-polyfill"
+3.module.exports = {
+    entry:['babel-polyfill','./src/main.js']
+}
 ```
 
 ##### 3. js-cookie插件

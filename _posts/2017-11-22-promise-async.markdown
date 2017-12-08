@@ -9,6 +9,7 @@ tags: 'promise'
 author: yunlei.ke
 ---
 由vue项目看常用异步请求方法语法以及ES6异步请求方法
+
 #### 一、Promise  
 1. Promise对象是一个构造函数，用来生成Promise实例,接受一个函数作为参数，而该函数的两个参数分别是resolve和reject。他们是两个函数，由js引擎提供，不用自己部署。 
 ```
