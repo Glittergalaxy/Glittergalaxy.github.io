@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><title> 2017-12-14-webpack-note</title><meta name="description" content="webpack配置简介"><link rel="canonical" href="http://localhost:4000/posts/webpack/"><link rel="alternate" type="application/rss+xml" title="Glittergalaxy" href="http://localhost:4000/feed.xml"><link href='https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|Roboto+Condensed:700&subset=latin' rel='stylesheet' type='text/css'><link rel="stylesheet" href="/assets/css/main.css"><meta property="og:url" content="http://localhost:4000/posts/webpack/"><meta property="og:type" content="website"><meta property="og:title" content="webpack配置简介"><meta property="og:description" content="webpack配置简介"><meta property="og:site_name" content="Glittergalaxy"><meta name="twitter:card" content="summary"><meta name="twitter:url" content="http://localhost:4000/posts/webpack/"><meta name="twitter:title" content="webpack配置简介"><meta name="twitter:description" content="webpack配置简介"><meta property="og:image" content="http://localhost:4000/assets/images/bg.svg"><meta name="twitter:image" content="http://localhost:4000/assets/images/bg.svg"><body><div id="shadow"></div><header class="main-header content-wrapper"> <input type="checkbox" id="menu-checkbox" /><nav class="center-wrapper nav-main"> <a class="blog-logo" href="/">Glittergalaxy</a> <a href="/about/">About</a> <a href="/posts/">Articles</a>  <label for="menu-checkbox" class="toggle-button" data-open="☰" data-close="☰" onclick></label></nav></header><aside class="sidebar" role="note" style="background-image: url(http://localhost:4000/assets/images/galaxy.jpg)"><div class="cover"><div class="cover-text"><div class="heading"> <a href="/posts/#webpack">webpack</a></div><p> webpack配置简介</div></div><div id="switcher"></div></aside><main class="content-wrapper"><article class="post"><h1 class="post-title">webpack配置简介</h1><p class="post-meta"> <time datetime="2017-01-13">13-01-2017</time> &nbsp;/&nbsp; <span>yunlei.ke</span><div class="post-content"><p>webpack配置简介<ol><li>入口起点(entry)<div class="highlighter-rouge"><pre class="highlight"><code> module.export = {
+     entry:[String|Array]
+     //单个入口
+     entry:{ 
+         main:'./src/file.js'
+     }
+     //分离应用程序和第三方库入口
+     entry:{
+         app:'./src/app.js',
+         vendors:'./src/vendors.js'
+     } 
+ };
+
+</code></pre></div><li>输出（output）<div class="highlighter-rouge"><pre class="highlight"><code>//此配置将一个bundle.js输出到assets目录中
+module.exports = {
+ output:{
+     filename:'bundle.js',
+     path:'/home/proj/public/assets'
+ }
+}
+//多个入口起点,利用占位符确保每个文件具有唯一的名称
+{
+ output:{
+     filename:'[name].js',
+     path:__dirname + '/dist'
+ }
+}
+</code></pre></div><li>加载器（loader）<div class="highlighter-rouge"><pre class="highlight"><code>module.exports = {
+ rules:[
+     {
+         test:/\.css/,
+         loader:'css'
+     },{
+         test:'/\.js/',
+         loader:'babel',
+         include:,
+         exclude:,
+         options:{
+                
+         },
+         query{
+             limit:1000,
+             name:,
+         }
+     }
+ ]
+}
+</code></pre></div><li>常用配置以及提高项目性能方法 <a href="https://segmentfault.com/a/1190000008644830">参考文章</a><ul><li>修改生成的js文件与文件名一一对应：<div class="highlighter-rouge"><pre class="highlight"><code>output: {
+ path: config.build.assetsRoot,
+ filename: utils.assetsPath('js/[name].[chunkhash].js'),
+ chunkFilename: utils.assetsPath('js/[name].[chunkhash].min.js')
+},
+</code></pre></div><li>修改打包后的文件中不包含sourcemap，提高性能<div class="highlighter-rouge"><pre class="highlight"><code>new UglifyJsPlugin({
+ uglifyOptions: {
+   compress: {
+       warnings: false
+   }
+ },
+ // sourceMap: config.build.productionSourceMap,
+ parallel: true
+}),
+或者直接修改config.build.productionSourceMap为false
+</code></pre></div><li>路由懒加载，提高性能<div class="highlighter-rouge"><pre class="highlight"><code>const whiteList = () =&gt; import('@/page/whiteList.vue')//返回promise
+</code></pre></div><li>为可直接在本地查看prodution打包后效果，修改生成的项目路径为相对路径<div class="highlighter-rouge"><pre class="highlight"><code>build: {
+ env: require('./prod.env'),
+ index: path.resolve(__dirname, '../dist/index.html'),
+ assetsRoot: path.resolve(__dirname, '../dist'),
+ assetsSubDirectory: 'static',
+ assetsPublicPath: './',//根路径
+}
+</code></pre></div><li>修改输出的目录名称或者index.html名称<div class="highlighter-rouge"><pre class="highlight"><code>build: {
+ env: require('./prod.env'),
+ index: path.resolve(__dirname, '../dist/index.html'),//修改dist或index名称即可
+ assetsRoot: path.resolve(__dirname, '../dist'),
+ assetsSubDirectory: 'static',
+ assetsPublicPath: './',//根路径
+}
+</code></pre></div></ul></ol><div class="post-links"> <a class="link-to-post" href="/posts/file-upload/"> <span class="link-to-post__next">&#10535; &nbsp;Next post</span> <span class="link-to-post__title">file-upload相关</span> </a> <a class="link-to-post" href="/posts/gulp-note/"> <span class="link-to-post__prev">&#10535; &nbsp;Previous post</span> <span class="link-to-post__title">gulp使用方法</span> </a></div></div></article></main><footer class="blog-footer content-wrapper"><p>&copy; <span class="full-year"></span> Glittergalaxy</footer><script src="/assets/js/scripts.js"></script>

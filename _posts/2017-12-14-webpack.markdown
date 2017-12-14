@@ -1,0 +1,114 @@
+---
+layout: post
+title:  "webpack配置简介"
+crawlertitle: "2017-12-14-webpack-note"
+summary: "webpack配置简介"
+date:   20170113
+categories: posts
+tags: 'webpack'
+author: yunlei.ke
+---
+webpack配置简介
+
+1. 入口起点(entry)  
+    ```
+    module.export = {
+        entry:[String|Array]
+        //单个入口
+        entry:{ 
+            main:'./src/file.js'
+        }
+        //分离应用程序和第三方库入口
+        entry:{
+            app:'./src/app.js',
+            vendors:'./src/vendors.js'
+        } 
+    };
+
+    ```
+2. 输出（output） 
+```
+//此配置将一个bundle.js输出到assets目录中
+module.exports = {
+    output:{
+        filename:'bundle.js',
+        path:'/home/proj/public/assets'
+    }
+}
+//多个入口起点,利用占位符确保每个文件具有唯一的名称
+{
+    output:{
+        filename:'[name].js',
+        path:__dirname + '/dist'
+    }
+}
+```
+3. 加载器（loader）  
+```
+module.exports = {
+    rules:[
+        {
+            test:/\.css/,
+            loader:'css'
+        },{
+            test:'/\.js/',
+            loader:'babel',
+            include:,
+            exclude:,
+            options:{
+                
+            },
+            query{
+                limit:1000,
+                name:,
+            }
+        }
+    ]
+}
+```
+4. 常用配置以及提高项目性能方法 [参考文章](https://segmentfault.com/a/1190000008644830)
+- 修改生成的js文件与文件名一一对应：
+```
+output: {
+    path: config.build.assetsRoot,
+    filename: utils.assetsPath('js/[name].[chunkhash].js'),
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash].min.js')
+},
+```
+- 修改打包后的文件中不包含sourcemap，提高性能
+```
+new UglifyJsPlugin({
+    uglifyOptions: {
+        compress: {
+            warnings: false
+        }
+    },
+    // sourceMap: config.build.productionSourceMap,
+    parallel: true
+}),
+或者直接修改config.build.productionSourceMap为false
+```
+- 路由懒加载，提高性能
+```
+const whiteList = () => import('@/page/whiteList.vue')//返回promise
+```
+- 为可直接在本地查看prodution打包后效果，修改生成的项目路径为相对路径
+```
+build: {
+    env: require('./prod.env'),
+    index: path.resolve(__dirname, '../dist/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: './',//根路径
+}
+```
+- 修改输出的目录名称或者index.html名称
+```
+build: {
+    env: require('./prod.env'),
+    index: path.resolve(__dirname, '../dist/index.html'),//修改dist或index名称即可
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: './',//根路径
+}
+```
